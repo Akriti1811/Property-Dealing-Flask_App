@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <link rel=stylesheet type=text/css href="static\mystyle.css"> -->
+    <!-- header section   {{ url_for('static', filename='mystyle.css') }} -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+
+    <title>HOME SWEET HOME</title>
+
+    <style>
+      .highlight{
+        font-size: 50px;
+        color:rgb(233, 67, 67);
+      }
+      .header-2{
+        font-family:cursive;
+      }
+      .header-rent{
+        background-image: url(/static/images/rent-bg.jpg);
+        background-size: cover;
+      }
+      .header-buy{
+        background-image: url(/static/images/buy-background.jpg);
+        background-size: cover;
+      }
+      .nav-item{
+        font-size: 25px;
+        font-weight: 600;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    
+    <section>
+      
+      <nav class="navbar fixed-top navbar-light " style="background-color: #b12929;">
+        <div class="container-fluid">
+          <a class="navbar-brand" style="color: #ffffff;font-weight: 600;"> Home_Sweet_Home</a>
+          <form class="d-flex">
+            <button class="btn btn-outline-success me-2 " style="color: #ffffff;font-weight: 500;border-color: white;" type="button">Post Property</button>
+            <button class="btn btn-outline-success me-2" style="color: #ffffff;font-weight: 500;border-color: white;" type="button">Login </button>
+            <button class="btn btn-outline-success me-2" style="color: #ffffff;font-weight: 500;border-color: white;" type="button">Sign Up</button>
+          </form>
+        </div>
+      </nav>
+
+    </section>
+
+    {% block body %} {% endblock %}
+
+    <!-- Footer  -->
+    <section>
+       
+        <footer >
+          <div class="bg-light">
+            <hr>
+            <div class="d-flex flex-wrap justify-content-center">
+              <div class="col-md-5 col-12 text-left py-5">
+                <h4>About Home_Sweet_Home</h4>
+                <p>Coming in a new city and meeting several brokers to find
+                  a suitable place to live now gets revolutionised . The
+                  easier, efficient and convenient way to find a safe and
+                  secure place to live is here , “HomeSweetHome” . It will
+                  allows user to find a place that best matches their
+                  requirements</p>
+              </div>
+              <div class="col-md-5 col-12 p-2 my-auto text-center">
+                <h5>Contact us</h5>
+                <p><strong>Toll Free number: </strong> 1800 **** ****</p>
+                <p><strong>E-mail Id: </strong> feedback@gmail.com</p>
+              </div>
+            </div>
+          </div>
+        </footer>
+  
+    </section>
+  
+    </body>
+  </html>

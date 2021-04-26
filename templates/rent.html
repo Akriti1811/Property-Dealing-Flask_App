@@ -1,0 +1,151 @@
+    {% extends "layout.html" %}
+    {% block body %}
+
+    <!-- content -->
+
+    <section class="header-rent">
+      
+      <div class="header-2 text-center">
+        <div class=" col-12 mt-5  pt-5">
+          <div class="heading ">
+            <h1><strong>Home Sweet Home</strong></h1>
+          </div>
+          <div class="subtitle pt-3">
+            <h3><i>Find your prefect <span class="highlight">Rental Home</span></i></h3>
+          </div> 
+        </div>   
+      </div>
+      
+      <nav class="navbar navbar-expand-lg justify-content-center" >
+        <ul class="nav nav-pills ">
+          <li class="nav-item">
+            <a class="nav-link" href="/">BUY</a>                  
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="true" href="/rent">RENT</a>
+          </li>
+        </ul>
+      </nav><br>
+
+      <div class="d-flex justify-content-center">
+
+        <div class="col-7">
+          <div>
+            <select class="form-select" aria-label="Default select example">
+              <option selected>City</option>
+              <option value="1">Banglore</option>
+              <option value="2">Kolkata</option>
+            </select><br>
+          </div>
+  
+          <div>
+            <select class="form-select" aria-label="Default select example">
+              <option selected>Property Type </option>
+              <option value="1">Flat</option>
+              <option value="2">House</option>
+            </select><br>
+          </div>
+
+          <div>
+            <select class="form-select" aria-label="Default select example">
+              <option selected>BHK</option>
+              <option value="1">1BHK</option>
+              <option value="2">2BHK</option>
+              <option value="3">3BHK</option>
+              <option value="4">4BHK</option>
+              <option value="5">5BHK</option>
+            </select><br>
+          </div>
+  
+          <div>
+            <div class="row">
+              <div class="col">
+                <select class="form-select" aria-label="Default select example">
+                  <option selected>Min Price</option>
+                  <option value="1">5000</option>
+                  <option value="2">10000</option>
+                  <option value="3">20000</option>
+                  <option value="4">30000</option>
+                  <option value="5">40000</option>
+                  <option value="6">50000</option>
+                  <option value="7">60000</option>
+                  <option value="8">70000</option>
+                  <option value="9">90000</option>
+                  <option value="10">1 lakh</option>
+                </select>
+              </div>
+              <div class="col">
+                <select class="form-select" aria-label="Default select example">
+                  <option selected>Max Price</option>
+                  <option value="1">5000</option>
+                  <option value="2">10000</option>
+                  <option value="3">20000</option>
+                  <option value="4">30000</option>
+                  <option value="5">40000</option>
+                  <option value="6">50000</option>
+                  <option value="7">60000</option>
+                  <option value="8">70000</option>
+                  <option value="9">90000</option>
+                  <option value="10">1 lakh</option>
+                </select><br>
+              </div>  
+            </div>
+          </div>
+
+          <div>
+            <button type="submit" class="btn btn-primary">Search</button>
+          </div><br>
+  
+        </div>
+        
+      </div>
+     
+    </section>
+
+      <div class="content px-5 py-5">
+        <h2 class="text-center"><strong>We've got Properties for Everyone</strong></h2>
+        <div class="d-flex flex-wrap justify-content-center">
+          
+          <div class="card col-md-4 col-12 p-2 mx-5 my-4" >
+            <img src="/static/images/own house rent.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Owner Properties</h5>
+            </div>
+            <div class="card-body">
+              <a href="#" class="card-link">Explore-></a>
+            </div>
+          </div>
+          
+          <div class="card col-md-4 col-12  p-2 mx-5 my-4" >
+            <img src="/static/images/new projects rent.jpg " class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">New Projects</h5>
+            </div>
+            <div class="card-body">
+              <a href="#" class="card-link">Explore-></a>
+            </div>
+          </div>
+
+          <div class="card col-md-4 col-12 p-2 mx-5 my-4" >
+            <img src="/static/images/immediately av.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Immediately Available</h5>
+            </div>
+            <div class="card-body">
+              <a href="#" class="card-link">Explore-></a>
+            </div>
+          </div>
+
+          <div class="card col-md-4 col-12 p-2 mx-5 my-4" >
+            <img src="/static/images/furnished rent.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Furnished Properties</h5>
+            </div>
+            <div class="card-body">
+              <a href="#" class="card-link">Explore-></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+     {% endblock %}
