@@ -39,6 +39,9 @@
         font-size: 25px;
         font-weight: 600;
       }
+      .nav-item-1{
+        font-weight: 600;
+      }
     </style>
 
   </head>
@@ -49,12 +52,21 @@
       
       <nav class="navbar fixed-top navbar-light " style="background-color: #b12929;">
         <div class="container-fluid">
-          <a class="navbar-brand" style="color: #ffffff;font-weight: 600;"> Home_Sweet_Home</a>
-          <form class="d-flex">
-            <button class="btn btn-outline-success me-2 " style="color: #ffffff;font-weight: 500;border-color: white;" type="button">Post Property</button>
-            <button class="btn btn-outline-success me-2" style="color: #ffffff;font-weight: 500;border-color: white;" type="button">Login </button>
-            <button class="btn btn-outline-success me-2" style="color: #ffffff;font-weight: 500;border-color: white;" type="button">Sign Up</button>
-          </form>
+          <a class="navbar-brand" style="color: #ffffff;font-weight: 600;"> HomeSweetHome</a>
+          <ul class="nav justify-content-end">
+            <li class="nav-item-1">
+              <a class="nav-link btn-outline-warning" href="/">Home</a>
+            </li>
+            <li class="nav-item-1">
+              <a class="nav-link btn-outline-warning" href="/post">Post Property</a>
+            </li>
+            <li class="nav-item-1">
+              <a class="nav-link btn-outline-warning" href="/login">Login</a>
+            </li>
+            <li class="nav-item-1">
+              <a class="nav-link btn-outline-warning" href="/signup">Sign Up</a>
+            </li>
+          </ul>
         </div>
       </nav>
 
@@ -66,11 +78,11 @@
     <section>
        
         <footer >
-          <div class="bg-light">
+          <div style="background-color: rgb(170, 190, 190);">
             <hr>
             <div class="d-flex flex-wrap justify-content-center">
               <div class="col-md-5 col-12 text-left py-5">
-                <h4>About Home_Sweet_Home</h4>
+                <h4>About HomeSweetHome</h4>
                 <p>Coming in a new city and meeting several brokers to find
                   a suitable place to live now gets revolutionised . The
                   easier, efficient and convenient way to find a safe and

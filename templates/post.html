@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="post-property d-flex  justify-content-center mt-5 pt-5">
+    
+    <div class="col-5">
+      <div>
+        <h2 class="text-center">POST YOUR PROPERY HERE</h2><br>
+      </div>
+      <div>
+        <select class="form-select" aria-label="Default select example">
+          <option selected>City</option>
+          <option value="1">Ahemdabaad</option>
+          <option value="2">Banglore</option>
+          <option value="3">Chennai</option>
+          <option value="4">Delhi</option>
+          <option value="5">Faridabaad</option>
+          <option value="6">Gaziabaad</option>
+          <option value="7">Greater Noida</option>
+          <option value="8">Gorakhpur</option>
+          <option value="9">Gurgaon</option>
+          <option value="10">Hyderabaad</option> 
+          <option value="11">Kolkata</option>
+          <option value="12">Mumbai</option>
+          <option value="13">Noida</option>
+          <option value="14">Pune</option>
+          <option value="15">Thane</option>
+          <option value="16">Varanasi</option>
+        </select><br>
+      </div>
+      
+      <div>
+        <select class="form-select" aria-label="Default select example">
+          <option selected>Property Type </option>
+          <option value="1">Flat</option>
+          <option value="2">House</option>
+        </select><br>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <select class="form-select" aria-label="Default select example">
+            <option selected>BHK</option>
+            <option value="1">1BHK</option>
+            <option value="2">2BHK</option>
+            <option value="3">3BHK</option>
+            <option value="4">4BHK</option>
+            <option value="5">5BHK</option>
+          </select><br>
+        </div>
+        <div class="col-md-6">
+          <fieldset class="row mb-3">
+            <legend class="col-form-label col-sm-2 pt-0">For</legend>
+            <div class="col-sm-10">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                <label class="form-check-label" for="gridRadios1">
+                  Sale
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                <label class="form-check-label" for="gridRadios2">
+                  Rent
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <input type="text" class="form-control py-2" placeholder="Locality">
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Bathroom</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select><br>
+        </div>
+  
+        <div class="col-md-6">
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Parking</option>
+            <option value="1">Available</option>
+            <option value="2">Not Available</option>
+          </select><br>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Furnishing</option>
+            <option value="1">Furnished</option>
+            <option value="2">Semi-Furnished</option>
+            <option value="3">Unfurnished</option>
+          </select><br>
+        </div>
+  
+        <div class="col-md-6">
+          <select class="form-select" aria-label="Default select example">
+            <option selected>Status</option>
+            <option value="1">Ready to move</option>
+            <option value="2">Almost Ready</option>
+          </select><br>
+        </div>
+      </div>
+
+      <div>
+        <button type="submit" class="btn btn-primary"> Post Property </button>
+      </div><br>
+
+      
+    </div>
+    
+  </div>
+
+{% endblock %}
