@@ -14,9 +14,9 @@ app=Flask(__name__)
 @app.route("/")
 def index():
     
-    # df = pd.read_csv(r"C:\Users\SHIVANI SINGH\Documents\bangluru_data_set1.csv")
+    
     df=pd.read_csv(r"C:\Users\SHIVANI SINGH\Documents\delhi_dataset1.csv")
-    # print(len(df))
+    
  
     correlation_matrix = df.corr()
     # print(correlation_matrix)
@@ -32,15 +32,15 @@ def index():
     X = imputer.transform(X)
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
-        
-    # print(g)
-        
+            
+    
     g=best_value_of_k(X_train,y_train,X_test,y_test) #Best value of k to find number is neighbour
         
-    # print(X)
+    
     number_of_neighbours(g,X,y)  #Function predicts price 
    
     return M.to_html() 
+
 
 def drop_fun(L):
     M= L.drop("property_no",axis='columns')
@@ -53,6 +53,7 @@ def drop_fun(L):
     M=M.drop("parking",axis='columns')
 
     return M
+
 
 def best_value_of_k(X_train,y_train,X_test,y_test):
     rmse_val = [] #to store rmse values for different k
@@ -73,6 +74,7 @@ def best_value_of_k(X_train,y_train,X_test,y_test):
             t=m
     
     return t
+
 
 def number_of_neighbours(g,X,y):
     Z = np.array([3,1000])
