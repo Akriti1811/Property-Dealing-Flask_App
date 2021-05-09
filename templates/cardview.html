@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block body %}
+  
+<div class="pt-5 mx-5 mt-5">
+    {%for i in range(0,10)%}
+    <div class="card m-5 px-3 py-3">
+        <div class="row">
+
+            <div class="col-md-3">
+                <img src="/static/images/card-cover.jpg" alt="..." width="310" height="210">
+            </div>
+
+            <div class="col-md-1 p-3">
+                <h5>Rs.Price</h5>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">BHK house/flat</h5>
+                    <p class="card-text">For sale/rent in locality_name</p>
+
+                    <div class="house-detail-card px-2 py-2">
+                        <div class="d-flex flex-wrap">                
+                            <div class="col-md-3 col-12 px-4">
+                               <h6>AREA</h6>
+                               <p>1234 sqft</p>
+                            </div>  
+
+                            <div class="col-md-3 col-12 px-4">
+                               <h6>STATUS</h6>
+                               <p>Ready to move</p>
+                            </div>
+
+                            <div class="col-md-3 col-12 px-4">
+                               <h6>FURNIHSING</h6>
+                               <p>Semi-furnished</p>
+                            </div>
+                  
+                            <div class="col-md-3 col-12 px-4">
+                               <h6>PARKING</h6>
+                               <p>1 covered</p>
+                            </div>
+                        </div> 
+                    </div>
+
+                    <div>
+                        <button class="btn btn-outline-info me-2" type="button">Contact Owner</button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {%endfor%}
+</div>
+
+  {% endblock %}
