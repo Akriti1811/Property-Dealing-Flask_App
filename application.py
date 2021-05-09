@@ -1,15 +1,14 @@
 from flask import Flask
 import numpy as np 
 import pandas as pd
-# from sklearn.linear_model import LinearRegression
+
 from sklearn.impute import SimpleImputer # used for handling missing data
 from sklearn.model_selection import train_test_split # used for splitting training and testing data
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import mean_squared_error
 from math import sqrt
 from sklearn import neighbors
-# from sklearn.metrics import accuracy_score
-# import matplotlib.pyplot as plt
+
 
 app=Flask(__name__)
 @app.route("/")
@@ -33,49 +32,14 @@ def index():
     X = imputer.transform(X)
     
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
- 
-    # knn_model = KNeighborsRegressor(n_neighbors=3)
-    # knn_model.fit(X_train, y_train)
-    # test_preds = knn_model.predict(X_test)
-    # print(knn_model.score(knn_model.score(X_test=X_test, y_test=y_test)))
-
-    # mse = mean_squared_error(y_train, test_preds)
-    # rmse = sqrt(mse)
-    # print(rmse)
-    
-    rmse_val = [] #to store rmse values for different k
-    for k in range(20):
-
-        k=k+1
-        model=neighbors.KNeighborsRegressor(n_neighbors=k)
-        model.fit(X_train, y_train)  #fit the model
-        pred=model.predict(X_test) #make prediction on test set
-        print(model.score(X_test, y_test))
-        error = sqrt(mean_squared_error(y_test,pred)) #calculate rmse
-        rmse_val.append(error) #store rmse values
-        print('RMSE value for k= ' , k , 'is:', error)
         
+    # print(g)
+        
+    g=best_value_of_k(X_train,y_train,X_test,y_test) #Best value of k to find number is neighbour
         
     # print(X)
-
-    # Z = np.array([3,1000])
-
-    # distances = np.linalg.norm(X - Z, axis='1')
-
-    # k = 5
-    # nearest_neighbor_ids = distances.argsort()[:k]
-    # print(nearest_neighbor_ids)
-
-    # nearest_neighbor_price = y[nearest_neighbor_ids]
-    # print(nearest_neighbor_price)
-
-    # sum=0
-    # for element in nearest_neighbor_price:
-    #     sum=sum+element
-    # avg=sum/5
-    # print(avg)
-    # print(sum)
-    
+    number_of_neighbours(g,X,y)  #Function predicts price 
+   
     return M.to_html() 
 
 def drop_fun(L):
@@ -90,13 +54,34 @@ def drop_fun(L):
 
     return M
 
-# def neighbour():
-#     for K in range(20):
-#     K = K+1
-#     model = neighbors.KNeighborsRegressor(n_neighbors = K)
+def best_value_of_k(X_train,y_train,X_test,y_test):
+    rmse_val = [] #to store rmse values for different k
+    for k in range(20):
 
-#     model.fit(x_train, y_train)  #fit the model
-#     pred=model.predict(x_test) #make prediction on test set
-#     error = sqrt(mean_squared_error(y_test,pred)) #calculate rmse
-#     rmse_val.append(error) #store rmse values
-#     print('RMSE value for k= ' , K , 'is:', error)
+        k=k+1
+        model=neighbors.KNeighborsRegressor(n_neighbors=k)
+        model.fit(X_train, y_train)  #fit the model
+        pred=model.predict(X_test) #make prediction on test set
+        # print(model.score(X_test, y_test))
+        error = sqrt(mean_squared_error(y_test,pred)) #calculate rmse
+        rmse_val.append(error) #store rmse values
+        # print('RMSE value for k= ' , k , 'is:', error)
+        p=min(rmse_val)
+        # print(p)
+    for m in range(20):
+        if(rmse_val[m]==p):
+            t=m
+    
+    return t
+
+def number_of_neighbours(g,X,y):
+    Z = np.array([3,1000])
+
+    distances = np.linalg.norm(X - Z, axis='1')
+
+    nearest_neighbor_ids = distances.argsort()[:g]
+    # print(nearest_neighbor_ids)
+
+    nearest_neighbor_price = y[nearest_neighbor_ids]
+    print("neighbouring prices : ")
+    print(nearest_neighbor_price)
