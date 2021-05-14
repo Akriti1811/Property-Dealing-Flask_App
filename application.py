@@ -15,29 +15,28 @@ app=Flask(__name__)
 def index():
     
     
-    df=pd.read_csv(r"C:\Users\SHIVANI SINGH\Documents\delhi_dataset1.csv")
+    df=pd.read_csv(r"C:\Users\SHIVANI SINGH\Documents\Buy_house.csv")
+    # df=pd.read_csv(r"C:\Users\SHIVANI SINGH\Documents\Rent_house.csv")
     
- 
-    correlation_matrix = df.corr()
+    correlation_matrix = df.corr()  
     # print(correlation_matrix)
-   
-    M=drop_fun(df)
-
-    X = M.iloc[:,0:2].values # attributes to determine dependent variable 
-    y = M.iloc[:,2].values  #indepemdent variable
     
+    H=drop_fun(df)
+    M=pd.get_dummies(H) # For categorical data
+    
+    y = M.iloc[:,3].values  #indepemdent variable
+    M=M.drop("price",axis='columns')
+    X = M.iloc[:,0:8].values # attributes to determine dependent variable 
 
-    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean') #Handle missing data
     imputer = imputer.fit(X)
     X = imputer.transform(X)
-    
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
             
-    
     g=best_value_of_k(X_train,y_train,X_test,y_test) #Best value of k to find number is neighbour
         
-    
-    number_of_neighbours(g,X,y)  #Function predicts price 
+    neighbouring_prices(g,X,y)  #Function predicts price 
    
     return M.to_html() 
 
@@ -46,12 +45,14 @@ def drop_fun(L):
     M= L.drop("property_no",axis='columns')
     M= M.drop("city",axis='columns')
     M= M.drop("locality",axis='columns')
-    M= M.drop("furnishing",axis='columns')
-    M= M.drop("status",axis='columns')
-    M= M.drop("type",axis='columns')
-    M=M.drop("bhk",axis='columns')
-    M=M.drop("parking",axis='columns')
 
+    M= M.drop("status",axis='columns')
+    
+    M=M.drop("parking",axis='columns')
+    M=M.drop("user_id",axis='columns')
+    # M= M.drop("furnishing",axis='columns')
+    # M= M.drop("type",axis='columns')
+    # M=M.drop("bhk",axis='columns')
     return M
 
 
@@ -71,13 +72,14 @@ def best_value_of_k(X_train,y_train,X_test,y_test):
         # print(p)
     for m in range(20):
         if(rmse_val[m]==p):
+            print(m)
             t=m
     
     return t
 
 
-def number_of_neighbours(g,X,y):
-    Z = np.array([3,1000])
+def neighbouring_prices(g,X,y):
+    Z = np.array([3,2,800,0,1,0,0,1])
 
     distances = np.linalg.norm(X - Z, axis='1')
 
