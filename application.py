@@ -84,7 +84,7 @@ def neighbouring_prices(g,X,y):
     distances = np.linalg.norm(X - Z, axis='1')
 
     nearest_neighbor_ids = distances.argsort()[:g]
-    # print(nearest_neighbor_ids)
+    #print(nearest_neighbor_ids)
 
     nearest_neighbor_price = y[nearest_neighbor_ids]
     print("neighbouring prices : ")
