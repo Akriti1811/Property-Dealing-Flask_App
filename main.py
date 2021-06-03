@@ -33,50 +33,70 @@ def signup():
 @app.route("/buy_own_pro")
 def buy_own_pro():
     pro_for="Sale"
+    heading="Owner Properties"
     sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Buy_house WHERE type='Builder_Floor'",conn)
-    return render_template('cardview.html',data=sql_query ,pro_for=pro_for)
+    return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
 
 @app.route("/buy_new_pro")
 def buy_new_pro():
     pro_for="Sale"
+    heading="New Projects"
     sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Buy_house WHERE type='Apartment'",conn)
-    return render_template('cardview.html',data=sql_query ,pro_for=pro_for)
+    return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
 
 @app.route("/buy_ready")
 def buy_ready():
     pro_for="Sale"
+    heading="Ready to Move-in Properties"
     sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Buy_house WHERE status='Ready_to_move'",conn)
-    return render_template('cardview.html',data=sql_query ,pro_for=pro_for)
+    return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
 
 @app.route("/buy_furnished")
 def buy_furnished():
     pro_for="Sale"
+    heading="Furnished Properties"
     sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Buy_house WHERE furnishing='Furnished'",conn)
-    return render_template('cardview.html',data=sql_query ,pro_for=pro_for)
+    return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
 
 @app.route("/rent_own_pro")
 def rent_own_pro():
     pro_for="Rent"
+    heading="Owner Properties"
     sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house WHERE type='Builder_Floor'",conn)
-    return render_template('cardview.html',data=sql_query ,pro_for=pro_for)
+    return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
 
 @app.route("/rent_new_pro")
 def rent_new_pro():
     pro_for="Rent"
+    heading="New Projects"  
     sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house WHERE type='Apartment'",conn)
-    return render_template('cardview.html',data=sql_query ,pro_for=pro_for)
+    return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
 
 @app.route("/rent_ready")
 def rent_ready():
     pro_for="Rent"
+    heading="Immediately Available Properties"
     sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house WHERE status='Ready_to_move'",conn)
-    return render_template('cardview.html',data=sql_query ,pro_for=pro_for)
+    return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
 
 @app.route("/rent_furnished")
 def rent_furnished():
     pro_for="Rent"
+    heading="Furnished Properties"
     sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house WHERE furnishing='Furnished'",conn)
-    return render_template('cardview.html',data=sql_query ,pro_for=pro_for)
+    return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
+
+@app.route("/rent_lodging")
+def rent_lodging():
+    pro_for="Rent"
+    heading="Lodging Properties"
+    sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house WHERE type='Lodging property'",conn)
+    return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
+
+@app.route("/propview")
+def propview():
+    # sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house INNER JOIN Property_dealing.dbo.Users ON Rent_house.user_id=Users.user_id WHERE user_id='id'",conn)
+    return render_template('propview.html')
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8080, debug=True)
