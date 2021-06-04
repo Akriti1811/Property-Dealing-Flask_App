@@ -9,13 +9,24 @@ from sklearn.metrics import mean_squared_error
 from math import sqrt
 from sklearn import neighbors
 
+import pyodbc
+
+app = Flask(__name__)
+
+conn = pyodbc.connect(  'Driver={SQL Server Native Client 11.0};'
+             'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
+             'Database=Property_dealing;'
+             'Trusted_Connection=yes;')
+
+cursor = conn.cursor()
 
 app=Flask(__name__)
 @app.route("/")
 def index():
     
-    
-    df=pd.read_csv(r"C:\Users\SHIVANI SINGH\Documents\Buy_house.csv")
+    # df=pd.read_sql_query("SELECT * FROM dbo.Buy_house",conn)
+    df=pd.read_sql_query("SELECT * FROM dbo.Rent_house",conn)
+    # df=pd.read_csv(r"C:\Users\SHIVANI SINGH\Documents\Buy_house.csv")
     # df=pd.read_csv(r"C:\Users\SHIVANI SINGH\Documents\Rent_house.csv")
     
     correlation_matrix = df.corr()  
@@ -26,7 +37,10 @@ def index():
     
     y = M.iloc[:,3].values  #indepemdent variable
     M=M.drop("price",axis='columns')
-    X = M.iloc[:,0:8].values # attributes to determine dependent variable 
+
+    # attributes to determine dependent variable 
+    # X= M.iloc[:,0:8].values # for buy data 
+    X = M.iloc[:,0:9].values # for rent data
 
     imputer = SimpleImputer(missing_values=np.nan, strategy='mean') #Handle missing data
     imputer = imputer.fit(X)
@@ -79,8 +93,8 @@ def best_value_of_k(X_train,y_train,X_test,y_test):
 
 
 def neighbouring_prices(g,X,y):
-    Z = np.array([3,2,800,0,1,0,0,1])
-
+    # Z = np.array([3,2,800,0,1,0,0,1])  # for buy data
+    Z = np.array([3,2,1000,0,1,0,0,0,1])  # for rent data
     distances = np.linalg.norm(X - Z, axis='1')
 
     nearest_neighbor_ids = distances.argsort()[:g]

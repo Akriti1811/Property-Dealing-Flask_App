@@ -3,12 +3,13 @@ import pyodbc
 import pandas as pd
 app = Flask(__name__)
 
-conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
-                         "Database=Property_dealing;"
-                         "Trusted_Connection=yes;")
+conn = pyodbc.connect(  'Driver={SQL Server Native Client 11.0};'
+             'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
+             'Database=Property_dealing;'
+             'Trusted_Connection=yes;')
 
 cursor = conn.cursor() 
+ 
 
 @app.route("/")
 def buy():
