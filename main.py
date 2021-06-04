@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import pyodbc
 import pandas as pd
 app = Flask(__name__)
@@ -22,9 +22,18 @@ def rent():
 def post():
     return render_template('post.html')
        
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    message = None
+    error = None
+    sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Users",conn)
+    if request.method == 'POST':
+        if request.form['Email'] != 'admin' or request.form['Password'] != 'admin':
+            error = 'Error: Invalid Credentials. Please try again.'
+        else:
+            message = "You successfully logged in as admin"
+    return render_template('login.html', message=message,error=error)
+
 
 @app.route("/signup")
 def signup():
