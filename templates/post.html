@@ -3,43 +3,43 @@
 
 <div class="post-property d-flex  justify-content-center mt-5 pt-5">
     
-    <div class="col-4">
+    <form class="col-4" action="" method="POST">
       <div>
         <h2 class="text-center">POST YOUR PROPERY HERE</h2><br>
       </div>
       <div>
-        <select class="form-select" aria-label="Default select example">
+        <select class="form-select" aria-label="Default select example" name="city">
           <option selected>City</option>
-          <option value="1">Ahemdabaad</option>
-          <option value="2">Banglore</option>
-          <option value="3">Chennai</option>
-          <option value="4">Delhi</option>
-          <option value="5">Faridabaad</option>
-          <option value="6">Gaziabaad</option>
-          <option value="7">Greater Noida</option>
-          <option value="8">Gorakhpur</option>
-          <option value="9">Gurgaon</option>
-          <option value="10">Hyderabaad</option> 
-          <option value="11">Kolkata</option>
-          <option value="12">Mumbai</option>
-          <option value="13">Noida</option>
-          <option value="14">Pune</option>
-          <option value="15">Thane</option>
-          <option value="16">Varanasi</option>
+          <option value="Ahemdabaad">Ahemdabaad</option>
+          <option value="Banglore">Banglore</option>
+          <option value="Chennai">Chennai</option>
+          <option value="Delhi">Delhi</option>
+          <option value="Faridabaad">Faridabaad</option>
+          <option value="Gaziabaad">Gaziabaad</option>
+          <option value="Greater Noida">Greater Noida</option>
+          <option value="Gorakhpur">Gorakhpur</option>
+          <option value="Gurgaon">Gurgaon</option>
+          <option value="Hyderabaad">Hyderabaad</option> 
+          <option value="Kolkata">Kolkata</option>
+          <option value="Mumbai">Mumbai</option>
+          <option value="Noida">Noida</option>
+          <option value="Pune">Pune</option>
+          <option value="Thane">Thane</option>
+          <option value="Varanasi">Varanasi</option>
         </select><br>
       </div>
       
       <div>
-        <select class="form-select" aria-label="Default select example">
+        <select class="form-select" aria-label="Default select example" name="property_type">
           <option selected>Property Type </option>
-          <option value="1">Apartment</option>
-          <option value="2">Builder_Floor</option>
+          <option value="Apartment">Apartment</option>
+          <option value="Builder_Floor">Builder_Floor</option>
         </select><br>
       </div>
 
       <div class="row">
         <div class="col-md-6">
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select" aria-label="Default select example" name="bhk">
             <option selected>BHK</option>
             <option value="1">1BHK</option>
             <option value="2">2BHK</option>
@@ -53,13 +53,13 @@
             <legend class="col-form-label col-sm-2 pt-0">For</legend>
             <div class="col-sm-10">
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="Sale" checked>
                 <label class="form-check-label" for="gridRadios1">
                   Sale
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="Rent">
                 <label class="form-check-label" for="gridRadios2">
                   Rent
                 </label>
@@ -70,12 +70,16 @@
       </div>
 
       <div class="mb-3">
-        <input type="text" class="form-control py-2" placeholder="Locality">
+        <input type="text" class="form-control py-2" placeholder="Locality" name="locality" >
+      </div>
+
+      <div class="mb-3">
+        <input type="number" class="form-control py-2" placeholder="Price" name="price">
       </div>
 
       <div class="row">
         <div class="col-md-6">
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select" aria-label="Default select example" name="bathroom">
             <option selected>Bathroom</option>
             <option value="1">1</option>
             <option value="2">2</option>
@@ -86,29 +90,29 @@
         </div>
   
         <div class="col-md-6">
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select" aria-label="Default select example" name="parking">
             <option selected>Parking</option>
-            <option value="1">yes</option>
-            <option value="2">no</option>
+            <option value="yes">yes</option>
+            <option value="no">no</option>
           </select><br>
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-6">
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select" aria-label="Default select example" name="furnishing">
             <option selected>Furnishing</option>
-            <option value="1">Furnished</option>
-            <option value="2">Semi-Furnished</option>
-            <option value="3">Unfurnished</option>
+            <option value="Furnished">Furnished</option>
+            <option value="Semi Furnished">Semi-Furnished</option>
+            <option value="Unfurnished">Unfurnished</option>
           </select><br>
         </div>
   
         <div class="col-md-6">
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select" aria-label="Default select example" name="status">
             <option selected>Status</option>
-            <option value="1">Ready_to_move</option>
-            <option value="2">Almost_Ready</option>
+            <option value="Ready_to_move">Ready to move</option>
+            <option value="Almost_Ready">Almost Ready</option>
           </select><br>
         </div>
       </div>
@@ -118,7 +122,7 @@
       </div><br>
 
       
-    </div>
+    </form>
     
   </div>
 

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,flash
 import pyodbc
 import pandas as pd
 app = Flask(__name__)
@@ -11,16 +11,43 @@ conn = pyodbc.connect(  'Driver={SQL Server Native Client 11.0};'
 cursor = conn.cursor() 
  
 
-@app.route("/")
+@app.route("/",methods=["POST","GET"])
 def buy():
+    if request.method == 'POST':
+        city=request.form["city"]
+        prop=request.form["property_type"]
+        bhk=request.form["bhk"]
+        min_price=request.form["Min_price"]
+        max_price=request.form["Max_price"]
+        print(city)
+        print(prop)
     return render_template('buy.html')
 
-@app.route("/rent")
+@app.route("/rent",methods=["POST","GET"])
 def rent():
+    if request.method == "POST":
+        r_city=request.form["city"]
+        r_property_typ=request.form["property_type"]
+        r_bhk=request.form["bhk"]
+        r_min_price=request.form["min_price"]
+        r_max_price=request.form["max_price"]
+        print(r_city)
     return render_template('rent.html')
 
-@app.route("/post")
+@app.route("/post",methods=["POST","GET"])
 def post():
+    if request.method == "POST":
+        city=request.form["city"]
+        property_typ=request.form["property_type"]
+        bhk=request.form["bhk"]
+        pourpose=request.form["gridRadios"]
+        # locality=request.form["locality"]
+        # price=request.form["price"]
+        bathroom=request.form["bathroom"]
+        parking=request.form["parking"]
+        furnishing=request.form["furnishing"]
+        status=request.form["status"]
+        print(city)
     return render_template('post.html')
        
 @app.route("/login", methods=['GET', 'POST'])
