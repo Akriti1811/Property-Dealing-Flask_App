@@ -8,11 +8,11 @@
         <form action="" method="post">
 
             <div class="mb-3">
-              <input type="text" class="form-control py-2" placeholder="E-mail Address" name="Email" value="{{ request.form.Email }}">
+              <input required type="text" class="form-control py-2" placeholder="E-mail Address" name="Email" value="{{ request.form.Email }}">
             </div>
 
             <div class="mb-3">
-              <input type="text" class="form-control py-2" placeholder="Password" name="Password" value="{{ request.form.password }}">
+              <input required type="text" class="form-control py-2" placeholder="Password" name="Password" value="{{ request.form.Password }}">
             </div>
           
           <button type="submit" class="btn btn-primary">Login</button>

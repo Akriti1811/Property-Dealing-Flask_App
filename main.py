@@ -1,12 +1,16 @@
-from flask import Flask, render_template, request,flash
+from flask import Flask, render_template, request,flash,session
 import pyodbc
 import pandas as pd
 app = Flask(__name__)
 
-conn = pyodbc.connect(  'Driver={SQL Server Native Client 11.0};'
-             'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
-             'Database=Property_dealing;'
-             'Trusted_Connection=yes;')
+# conn = pyodbc.connect( 'Driver={SQL Server Native Client 11.0};'
+#                         'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
+#                         'Database=Property_dealing;'
+#                         'Trusted_Connection=yes;')
+conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
+                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                         "Database=Property_dealing;"
+                         "Trusted_Connection=yes;")
 
 cursor = conn.cursor() 
  
@@ -41,16 +45,41 @@ def post():
         property_typ=request.form["property_type"]
         bhk=request.form["bhk"]
         pourpose=request.form["gridRadios"]
-        # locality=request.form["locality"]
-        # price=request.form["price"]
+        locality=request.form["locality"]
+        price=request.form["price"]
         bathroom=request.form["bathroom"]
         parking=request.form["parking"]
         furnishing=request.form["furnishing"]
         status=request.form["status"]
         print(city)
+        print(locality)
+        print(price)
     return render_template('post.html')
        
 @app.route("/login", methods=['GET', 'POST'])
+# def login():
+#     message = None
+#     error = None
+#     if request.method == 'POST' and 'Email' in request.form and 'Password' in request.form:
+#         Email = request.form['Email']
+#         password = request.form['Password']
+        # print(Email)
+        # print(password)
+        # account= pd.read_sql_query
+        # cursor.execute("SELECT * FROM Property_dealing.dbo.Users WHERE email-id = '{Email}' AND password ='{password}'",conn)
+        # query= cursor.execute("SELECT * FROM Property_dealing.dbo.Users WHERE email_id = ? AND password = ? ",(Email, password,))
+        # account = cursor.fetchall()
+        # account= pd.read_sql_query(query,conn)
+        # account= pd.read_sql_query(query,conn, params=(Email, password,))
+    #     if account:
+    #         session['loggedin'] = True
+    #         session['user-id'] = account['user-id']
+    #         session['Email'] = account['Email']
+    #         message = "Logged in successfully!"
+    #     else:
+    #         error = "Error: Invalid Credentials. Please try again."
+        
+    # return render_template('login.html', message=message,error=error)
 def login():
     message = None
     error = None
@@ -59,7 +88,7 @@ def login():
         if request.form['Email'] != 'admin' or request.form['Password'] != 'admin':
             error = 'Error: Invalid Credentials. Please try again.'
         else:
-            message = "You successfully logged in as admin"
+            message = "Logged in successfully!"
     return render_template('login.html', message=message,error=error)
 
 
