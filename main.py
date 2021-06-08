@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request,flash,session
+from flask import Flask, render_template, request, flash, session, g, redirect, url_for
 import pyodbc
-import pandas as pd
+import pandas as pd 
+from pandas import DataFrame
+import os
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 # conn = pyodbc.connect( 'Driver={SQL Server Native Client 11.0};'
 #                         'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
@@ -40,6 +43,7 @@ def rent():
 
 @app.route("/post",methods=["POST","GET"])
 def post():
+    message=None
     if request.method == "POST":
         city=request.form["city"]
         property_typ=request.form["property_type"]
@@ -51,50 +55,67 @@ def post():
         parking=request.form["parking"]
         furnishing=request.form["furnishing"]
         status=request.form["status"]
+        message = "You have posted your property successfully!"
         print(city)
         print(locality)
         print(price)
-    return render_template('post.html')
+    return render_template('post.html', message=message)
        
 @app.route("/login", methods=['GET', 'POST'])
-# def login():
-#     message = None
-#     error = None
-#     if request.method == 'POST' and 'Email' in request.form and 'Password' in request.form:
-#         Email = request.form['Email']
-#         password = request.form['Password']
-        # print(Email)
-        # print(password)
-        # account= pd.read_sql_query
-        # cursor.execute("SELECT * FROM Property_dealing.dbo.Users WHERE email-id = '{Email}' AND password ='{password}'",conn)
-        # query= cursor.execute("SELECT * FROM Property_dealing.dbo.Users WHERE email_id = ? AND password = ? ",(Email, password,))
-        # account = cursor.fetchall()
-        # account= pd.read_sql_query(query,conn)
-        # account= pd.read_sql_query(query,conn, params=(Email, password,))
-    #     if account:
-    #         session['loggedin'] = True
-    #         session['user-id'] = account['user-id']
-    #         session['Email'] = account['Email']
-    #         message = "Logged in successfully!"
-    #     else:
-    #         error = "Error: Invalid Credentials. Please try again."
-        
-    # return render_template('login.html', message=message,error=error)
 def login():
     message = None
     error = None
-    sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Users",conn)
-    if request.method == 'POST':
-        if request.form['Email'] != 'admin' or request.form['Password'] != 'admin':
-            error = 'Error: Invalid Credentials. Please try again.'
+    if request.method == 'POST' and 'Email' in request.form and 'Password' in request.form:
+        Email = request.form['Email']
+        password = request.form['Password']
+        # print(Email)
+        # print(password)
+        session.pop('loggedin',None)
+        session.pop('userid',None)
+        # session.pop('Email',None)
+        query= cursor.execute('''SELECT * FROM HERE email_id = ? Property_dealing.dbo.Users WAND password = ? ''',Email, password)
+        account =pd.DataFrame(query.fetchall())
+        print(account.iloc[0,0])                  #the first location is returning the whole row instead of first cell of the first row
+        if account.empty:
+            error = "Error: Invalid Credentials. Please try again."
         else:
+            session['loggedin'] = True
+            # session['userid'] = account['user_id']
+            # session['Email'] = account['Email']
             message = "Logged in successfully!"
+
     return render_template('login.html', message=message,error=error)
 
+# def login():                 #HARD-CODED login function                          
+#     message = None
+#     error = None
+#     if request.method == 'POST':
+#         if request.form['Email'] != 'admin' or request.form['Password'] != 'admin':
+#             error = 'Error: Invalid Credentials. Please try again.'
+#         else:
+#             message = "Logged in successfully!"
+#     return render_template('login.html', message=message,error=error)
 
-@app.route("/signup")
+
+@app.route("/signup", methods=['GET', 'POST'])
 def signup():
-    return render_template('signup.html')
+    message=None
+    if request.method == "POST":
+        name=request.form["Name"]
+        Email=request.form["Email"]
+        number=request.form["Number"]
+        password=request.form["Password"]
+        message="Signed-up Successfully"
+        # print(name)
+        # print(Email)
+        # print(number)
+        # print(password)
+        query= cursor.execute("SELECT MAX(user_id) FROM Property_dealing.dbo.Users")
+        user_id =pd.DataFrame(query.fetchall())
+        # print(user_id)             
+        # c.execute("INSERT INTO RecordONE (user_id,name,Email_id,Phone_no,password) VALUES(?, ?, ?, ?, ?)", (user_id,name,Email,number,password))
+        # conn.commit()
+    return render_template('signup.html',message=message)
 
 @app.route("/buy_own_pro")
 def buy_own_pro():
@@ -156,13 +177,23 @@ def rent_furnished():
 def rent_lodging():
     pro_for="Rent"
     heading="Lodging Properties"
-    sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house WHERE type='Lodging property'",conn)
+    sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house WHERE type='Lodging_property'",conn)
     return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
 
 @app.route("/propview")
 def propview():
-    # sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house INNER JOIN Property_dealing.dbo.Users ON Rent_house.user_id=Users.user_id WHERE user_id='id'",conn)
-    return render_template('propview.html')
+    error=None
+    if g.loggedin:
+        return render_template('propview.html')
+   # sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house INNER JOIN Property_dealing.dbo.Users ON Rent_house.user_id=Users.user_id WHERE user_id='id'",conn)
+    return redirect(url_for('login'))
+
+@app.before_request
+def before_request():
+    g.loggedin=None
+    if 'loggedin' in session:
+        g.loggedin = session['loggedin']
+
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=8080, debug=True)

@@ -15,7 +15,14 @@
               <input required type="text" class="form-control py-2" placeholder="Password" name="Password" value="{{ request.form.Password }}">
             </div>
           
-          <button type="submit" class="btn btn-primary">Login</button>
+            <div class="row">
+              <div class="col ">
+                <button type="reset" class="btn btn-primary ">Reset</button>
+              </div>
+              <div class="col" style="text-align: right;">
+                <button type="submit" class="btn btn-primary">Login</button>
+              </div>
+            </div>
         </form><br>
 
         {% if message %}

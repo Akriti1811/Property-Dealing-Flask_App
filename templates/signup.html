@@ -5,24 +5,36 @@
     <div class=" py-5">
       <h2 class="text-center py-4">SIGN UP</h2>
       <div class="col-md-4 col-12 form-inner pb-5 px-5 mx-auto">
-        <form>
+        <form action="" method="post">
             <div class="mb-3">
-              <input required type="text" class="form-control py-2" placeholder="Name" id="Name">
+              <input required type="text" class="form-control py-2" placeholder="Name" name="Name" value="{{ request.form.Name }}">
             </div>
           
             <div class="mb-3">
-              <input required type="text" class="form-control py-2" placeholder="E-mail Address" id="E-mail Address">
+              <input required type="text" class="form-control py-2" placeholder="E-mail Address" name="Email" value="{{ request.form.Email }}">
             </div>
 
             <div class="mb-3">
-                <input required type="number" class="form-control py-2" placeholder="Mobile Number" id="Mobile Number">
+                <input required type="number" class="form-control py-2" placeholder="Mobile Number" name="Number" value="{{ request.form.Number }}">
             </div>
 
             <div class="mb-3">
-              <input required type="text" class="form-control py-2" placeholder="Password" id="Password">
+              <input required type="text" class="form-control py-2" placeholder="Password" name="Password" value="{{ request.form.Password }}">
             </div>
-          
-          <button type="submit" class="btn btn-primary">Sign Up</button>
+
+            {% if message %}
+            <div class="alert alert-success" role="alert">{{ message }} </div>
+            {% endif %}
+            <div class="row">
+              <div class="col ">
+                <button type="reset" class="btn btn-primary ">Reset</button>
+              </div>
+              <div class="col" style="text-align: right;">
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+              </div>
+            </div>
+            
+         
         </form>
       </div>
     </div>
