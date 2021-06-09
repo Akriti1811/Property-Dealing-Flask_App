@@ -52,20 +52,41 @@ def rent():
 
 @app.route("/post",methods=["POST","GET"])
 def post():
-    message=None
-    if request.method == "POST":
-        city=request.form["city"]
-        prop_type=request.form["property_type"]
-        bhk=request.form["bhk"]
-        purpose=request.form["gridRadios"]
-        locality=request.form["locality"]
-        price=request.form["price"]
-        bathroom=request.form["bathroom"]
-        parking=request.form["parking"]
-        furnishing=request.form["furnishing"]
-        status=request.form["status"]
-        message = "You have posted your property successfully!"       
-    return render_template('post.html', message=message)
+    if g.loggedin:
+        message=None
+        if request.method == "POST":
+            city=request.form["city"]
+            prop_type=request.form["property_type"]
+            bhk=request.form["bhk"]
+            purpose=request.form["gridRadios"]
+            locality=request.form["locality"]
+            area=request.form["area"]
+            price=request.form["price"]
+            bathroom=request.form["bathroom"]
+            parking=request.form["parking"]
+            furnishing=request.form["furnishing"]
+            status=request.form["status"]
+            user_id=session['userid']
+            message = "You have posted your property successfully!"   
+            if prop_type=="Lodging_property":
+                purpose="Rent"
+            if purpose=="Sale":
+                query= cursor.execute("SELECT MAX(property_no) FROM Property_dealing.dbo.Buy_house")
+                last_no =query.fetchone()
+                last=int(last_no[0])
+                prop_no=last+1 
+                cursor.execute('''INSERT INTO Property_dealing.dbo.Buy_house (property_no, city, bhk, bathroom, parking, area, locality, furnishing, price, status, type, user_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',prop_no, city, bhk, bathroom, parking, area, locality, furnishing, price, status, prop_type, user_id)
+                conn.commit()
+            else:
+                query= cursor.execute("SELECT MAX(property_no) FROM Property_dealing.dbo.Rent_house")
+                last_no =query.fetchone()
+                last=int(last_no[0])
+                prop_no=last+1 
+                cursor.execute('''INSERT INTO Property_dealing.dbo.Rent_house (property_no, city, bhk, bathroom, parking, area, locality, furnishing, price, status, type, user_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',prop_no, city, bhk, bathroom, parking, area, locality, furnishing, price, status, prop_type, user_id)
+                conn.commit()    
+        return render_template('post.html', message=message)
+    return redirect(url_for('login'))
+    
        
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -185,7 +206,6 @@ def rent_lodging():
 
 @app.route("/propview")
 def propview():
-    error=None
     if g.loggedin:
         return render_template('propview.html')
    # sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house INNER JOIN Property_dealing.dbo.Users ON Rent_house.user_id=Users.user_id WHERE user_id='id'",conn)
