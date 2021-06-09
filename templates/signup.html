@@ -23,8 +23,12 @@
             </div>
 
             {% if message %}
-            <div class="alert alert-success" role="alert">{{ message }} </div>
+              <div class="alert alert-success" role="alert">{{ message }} </div>
             {% endif %}
+            {% if error %}
+              <div class="alert alert-danger" role="alert">{{ error }} </div>
+            {% endif %} 
+            
             <div class="row">
               <div class="col ">
                 <button type="reset" class="btn btn-primary ">Reset</button>

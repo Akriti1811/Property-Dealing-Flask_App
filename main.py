@@ -20,25 +20,34 @@ cursor = conn.cursor()
 
 @app.route("/",methods=["POST","GET"])
 def buy():
+    pro_for="Sale"
+    heading="BEST MATCHES"
     if request.method == 'POST':
         city=request.form["city"]
         prop=request.form["property_type"]
         bhk=request.form["bhk"]
         min_price=request.form["Min_price"]
         max_price=request.form["Max_price"]
-        print(city)
-        print(prop)
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? ''',city, prop, bhk, min_price, max_price)
+        sql_query=query.fetchall()         
+        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
+        cursor.close()
     return render_template('buy.html')
 
 @app.route("/rent",methods=["POST","GET"])
 def rent():
+    pro_for="Rent"
+    heading="BEST MATCHES"
     if request.method == "POST":
         r_city=request.form["city"]
-        r_property_typ=request.form["property_type"]
+        r_prop=request.form["property_type"]
         r_bhk=request.form["bhk"]
         r_min_price=request.form["min_price"]
         r_max_price=request.form["max_price"]
-        print(r_city)
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? ''',r_city, r_prop, r_bhk, r_min_price, r_max_price)
+        sql_query=query.fetchall()         
+        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
+        cursor.close()
     return render_template('rent.html')
 
 @app.route("/post",methods=["POST","GET"])
@@ -56,9 +65,6 @@ def post():
         furnishing=request.form["furnishing"]
         status=request.form["status"]
         message = "You have posted your property successfully!"
-        print(city)
-        print(locality)
-        print(price)
     return render_template('post.html', message=message)
        
 @app.route("/login", methods=['GET', 'POST'])
@@ -73,16 +79,17 @@ def login():
         session.pop('loggedin',None)
         session.pop('userid',None)
         # session.pop('Email',None)
-        query= cursor.execute('''SELECT * FROM HERE email_id = ? Property_dealing.dbo.Users WAND password = ? ''',Email, password)
-        account =pd.DataFrame(query.fetchall())
-        print(account.iloc[0,0])                  #the first location is returning the whole row instead of first cell of the first row
-        if account.empty:
-            error = "Error: Invalid Credentials. Please try again."
-        else:
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Users WHERE email_id = ? AND password = ? ''',Email, password)
+        # account =pd.DataFrame(query.fetchall())
+        account =query.fetchall()
+        # print(account)
+        if account:
             session['loggedin'] = True
             # session['userid'] = account['user_id']
             # session['Email'] = account['Email']
-            message = "Logged in successfully!"
+            message = "Logged in successfully!"           
+        else:
+            error = "Error: Invalid Credentials. Please try again."
 
     return render_template('login.html', message=message,error=error)
 
@@ -100,22 +107,31 @@ def login():
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
     message=None
+    error=None
     if request.method == "POST":
         name=request.form["Name"]
         Email=request.form["Email"]
         number=request.form["Number"]
-        password=request.form["Password"]
-        message="Signed-up Successfully"
+        password=request.form["Password"]   
         # print(name)
         # print(Email)
         # print(number)
         # print(password)
+        num= int(number)
+        if num<1000000000 or num>9999999999:
+            error= "Number not valid! Please check again."
+        else:
+            message="Signed-up Successfully!"
         query= cursor.execute("SELECT MAX(user_id) FROM Property_dealing.dbo.Users")
-        user_id =pd.DataFrame(query.fetchall())
-        # print(user_id)             
-        # c.execute("INSERT INTO RecordONE (user_id,name,Email_id,Phone_no,password) VALUES(?, ?, ?, ?, ?)", (user_id,name,Email,number,password))
+        last_id =pd.DataFrame(query.fetchall())
+        # print(last_id.iloc[0,0])
+        # u=last_id.iloc[0,0]
+        # l=int(u)
+        # print(u)
+        print(last_id)             
+        # cursor.execute('''INSERT INTO RecordONE (user_id, name, Email_id, Phone_no, password) VALUES(?, ?, ?, ?, ?)''',user_id, name, Email, number, password))
         # conn.commit()
-    return render_template('signup.html',message=message)
+    return render_template('signup.html',message=message, error=error)
 
 @app.route("/buy_own_pro")
 def buy_own_pro():
