@@ -55,16 +55,16 @@ def post():
     message=None
     if request.method == "POST":
         city=request.form["city"]
-        property_typ=request.form["property_type"]
+        prop_type=request.form["property_type"]
         bhk=request.form["bhk"]
-        pourpose=request.form["gridRadios"]
+        purpose=request.form["gridRadios"]
         locality=request.form["locality"]
         price=request.form["price"]
         bathroom=request.form["bathroom"]
         parking=request.form["parking"]
         furnishing=request.form["furnishing"]
         status=request.form["status"]
-        message = "You have posted your property successfully!"
+        message = "You have posted your property successfully!"       
     return render_template('post.html', message=message)
        
 @app.route("/login", methods=['GET', 'POST'])
@@ -74,19 +74,13 @@ def login():
     if request.method == 'POST' and 'Email' in request.form and 'Password' in request.form:
         Email = request.form['Email']
         password = request.form['Password']
-        # print(Email)
-        # print(password)
         session.pop('loggedin',None)
         session.pop('userid',None)
-        # session.pop('Email',None)
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Users WHERE email_id = ? AND password = ? ''',Email, password)
-        # account =pd.DataFrame(query.fetchall())
-        account =query.fetchall()
-        # print(account)
+        account =query.fetchone()
         if account:
             session['loggedin'] = True
-            # session['userid'] = account['user_id']
-            # session['Email'] = account['Email']
+            session['userid'] = account[0]
             message = "Logged in successfully!"           
         else:
             error = "Error: Invalid Credentials. Please try again."
@@ -112,25 +106,18 @@ def signup():
         name=request.form["Name"]
         Email=request.form["Email"]
         number=request.form["Number"]
-        password=request.form["Password"]   
-        # print(name)
-        # print(Email)
-        # print(number)
-        # print(password)
+        password=request.form["Password"] 
         num= int(number)
         if num<1000000000 or num>9999999999:
             error= "Number not valid! Please check again."
         else:
             message="Signed-up Successfully!"
         query= cursor.execute("SELECT MAX(user_id) FROM Property_dealing.dbo.Users")
-        last_id =pd.DataFrame(query.fetchall())
-        # print(last_id.iloc[0,0])
-        # u=last_id.iloc[0,0]
-        # l=int(u)
-        # print(u)
-        print(last_id)             
-        # cursor.execute('''INSERT INTO RecordONE (user_id, name, Email_id, Phone_no, password) VALUES(?, ?, ?, ?, ?)''',user_id, name, Email, number, password))
-        # conn.commit()
+        last_id =query.fetchone()
+        last=int(last_id[0])
+        user_id=last+1  
+        cursor.execute('''INSERT INTO Property_dealing.dbo.Users (user_id, name, Email_id, Phone_no, password) VALUES(?, ?, ?, ?, ?)''',user_id, name, Email, number, password)
+        conn.commit()
     return render_template('signup.html',message=message, error=error)
 
 @app.route("/buy_own_pro")
