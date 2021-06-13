@@ -6,7 +6,7 @@
     <section class="header-buy">
 
       <div class="header-2 text-center">
-        <div class=" col-12 mt-5  pt-5">
+        <div class=" col-12 mt-5 pt-5">
           <div class="heading ">
             <h1><strong>Home Sweet Home</strong></h1>
           </div>
@@ -30,14 +30,21 @@
       <div class="search-bar d-flex justify-content-center">
 
         <form class="col-5" action="" method="POST">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
           <div>
-            <select required class="form-select" aria-label="Default select example" name="city">
+            <select required id="city" class="form-select" aria-label="Default select example" name="city">
               <option selected disabled value="">City</option>
               <option value="Banglore">Banglore</option>
               <option value="Delhi">Delhi</option>
             </select><br>
           </div>
-  
+        
+          <div>
+            <select id="locality" class="form-select" aria-label="Default select example" name="locality">
+              <option selected disabled value="">Locality</option>
+            </select><br>
+          </div>
+
           <div>
             <select required class="form-select" aria-label="Default select example" name="property_type">
               <option selected disabled value="">Property Type </option>
@@ -99,10 +106,15 @@
               </div>  
             </div>
           </div>
-
-          <div>
-            <button href="/" type="submit" class="btn btn-primary">Search</button>
+          <div class="row">
+            <div class="col-2 ">
+              <button href="/" type="submit" class="btn btn-primary">Search</button>
+            </div><br>
+            <div class="col-2 ">
+              <button type="reset" class="btn btn-primary ">Reset</button>
+            </div>
           </div><br>
+          
   
         </form>
         
@@ -118,7 +130,7 @@
             <img src="/static/images/own house buy.jpg" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title">Owner Properties</h5>
-              <a href="/buy_own_pro" class="card-link">Explore</a>
+              <a href="/buy_own_pro" class="card-link">Explore</a>                  
             </div>
           </div>
           

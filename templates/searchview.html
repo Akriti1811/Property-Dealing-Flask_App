@@ -2,12 +2,16 @@
 {% block body %}
 <div class="pt-5 mx-5 mt-5">
 <h2 class="text-center">{{ heading }}</h2>
+{% if error %}
+    <br><div class=" mx-5 alert alert-danger text-center"  role="alert">Sorry! We couldn't find any property according to your exact requirements. You can search for more properties.</div><br>
+    <div class="text-center"><p>Visit our home page <a href="/">Home</a></p></div><br>
+{% endif %}
     {%for row in data:%}
     <div class="card m-5 px-3 py-3">
         <div class="row">
 
             <div class="col-md-3">
-                <img src="/static/images/card-cover.jpg" alt="..." width="310" height="210">
+                <img src="/static/images/card-cover.jpg" alt="..." width="265" height="205">
             </div>
 
             <div class="col-md-2 p-3">

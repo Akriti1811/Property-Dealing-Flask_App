@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, session, g, redirect, url_for
+from flask import Flask, render_template, request, session, g, redirect, url_for
 import pyodbc
 import pandas as pd 
 from pandas import DataFrame
@@ -22,31 +22,40 @@ cursor = conn.cursor()
 def buy():
     pro_for="Sale"
     heading="BEST MATCHES"
+    error=None
     if request.method == 'POST':
         city=request.form["city"]
         prop=request.form["property_type"]
         bhk=request.form["bhk"]
+        locality=request.form["locality"]
         min_price=request.form["Min_price"]
         max_price=request.form["Max_price"]
-        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? ''',city, prop, bhk, min_price, max_price)
-        sql_query=query.fetchall()         
-        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, min_price, max_price, locality)
+        sql_query=query.fetchall() 
+        if cursor.rowcount == 0:
+            heading="NO MATCHES FOUND"
+            error="true"
+        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error)
         cursor.close()
     return render_template('buy.html')
-
 @app.route("/rent",methods=["POST","GET"])
 def rent():
     pro_for="Rent"
     heading="BEST MATCHES"
+    error=None
     if request.method == "POST":
         r_city=request.form["city"]
         r_prop=request.form["property_type"]
         r_bhk=request.form["bhk"]
+        r_locality=request.form["locality"]
         r_min_price=request.form["min_price"]
         r_max_price=request.form["max_price"]
-        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? ''',r_city, r_prop, r_bhk, r_min_price, r_max_price)
-        sql_query=query.fetchall()         
-        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',r_city, r_prop, r_bhk, r_min_price, r_max_price,r_locality)
+        sql_query=query.fetchall() 
+        if cursor.rowcount == 0:
+            heading="NO MATCHES FOUND"
+            error="true"        
+        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error)
         cursor.close()
     return render_template('rent.html')
 
@@ -208,8 +217,14 @@ def rent_lodging():
 def propview():
     if g.loggedin:
         return render_template('propview.html')
-   # sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house INNER JOIN Property_dealing.dbo.Users ON Rent_house.user_id=Users.user_id WHERE user_id='id'",conn)
-    return redirect(url_for('login'))
+    return redirect(url_for('login'))    
+
+# @app.route("/propview/<id>")
+# def propview(id):
+#     if g.loggedin:
+#         sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Buy_house INNER JOIN Property_dealing.dbo.Users ON Rent_house.user_id=Users.user_id WHERE user_id='id'",conn)
+#         return render_template('propview.html')     
+#     return redirect(url_for('login'))
 
 @app.before_request
 def before_request():
