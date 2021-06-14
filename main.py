@@ -3,23 +3,32 @@ import pyodbc
 import pandas as pd 
 from pandas import DataFrame
 import os
+import json
+import application
+
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-# conn = pyodbc.connect( 'Driver={SQL Server Native Client 11.0};'
-#                         'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
-#                         'Database=Property_dealing;'
-#                         'Trusted_Connection=yes;')
-conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
-                         "Database=Property_dealing;"
-                         "Trusted_Connection=yes;")
+conn = pyodbc.connect( 'Driver={SQL Server Native Client 11.0};'
+                        'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
+                        'Database=Property_dealing;'
+                        'Trusted_Connection=yes;')
+# conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
+#                          "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+#                          "Database=Property_dealing;"
+#                          "Trusted_Connection=yes;")
 
 cursor = conn.cursor() 
  
 
 @app.route("/",methods=["POST","GET"])
 def buy():
+
+    f=open('buy_input.json',"r")  # using json file to store user input to be used by ML model
+    data=f.read()
+    ss=json.loads(data)
+    f.close()
+        
     pro_for="Sale"
     heading="BEST MATCHES"
     error=None
@@ -30,6 +39,33 @@ def buy():
         locality=request.form["locality"]
         min_price=request.form["Min_price"]
         max_price=request.form["Max_price"]
+        furnish=request.form["furnishing"]
+
+        # query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, min_price, max_price, locality)
+        # sql_query=query.fetchall() 
+        # if cursor.rowcount == 0:
+        #     heading="NO MATCHES FOUND"
+        #     error="true"
+        # return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error)
+        
+        
+        # Updating json file
+        ss['city']=city
+        ss['propert_y']=prop
+        ss['bhk']=bhk
+        ss['min_price']=min_price
+        ss['max_price']=max_price
+        ss['furnishing']=furnish
+        ss['variable']=0
+        g=open('buy_input.json',"w")
+        json.dump(ss, g)
+        g.close()
+        # {"city":"c","propert_y":"prop","bhk":0,"min_price":0,"max_price":0,"furnishing":"furnish","variable":0,"predicted_price":0}
+        predicted_price=(application.index())
+        print("predicted_price")
+        print(predicted_price)
+
+        
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, min_price, max_price, locality)
         sql_query=query.fetchall() 
         if cursor.rowcount == 0:
@@ -38,8 +74,15 @@ def buy():
         return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error)
         cursor.close()
     return render_template('buy.html')
+
 @app.route("/rent",methods=["POST","GET"])
 def rent():
+    
+    f=open('buy_input.json',"r")
+    data=f.read()
+    ss=json.loads(data)
+    
+
     pro_for="Rent"
     heading="BEST MATCHES"
     error=None
@@ -50,6 +93,26 @@ def rent():
         r_locality=request.form["locality"]
         r_min_price=request.form["min_price"]
         r_max_price=request.form["max_price"]
+        r_furnish=request.form["furnishing"]
+        r_min_price=request.form["min_price"]
+        r_max_price=request.form["max_price"]
+         
+        # Updating json file
+        ss['city']=r_city
+        ss['propert_y']=r_prop
+        ss['bhk']=r_bhk
+        ss['min_price']=r_min_price
+        ss['max_price']=r_max_price
+        ss['furnishing']=r_furnish
+        ss['variable']=1
+        g=open('buy_input.json',"w")
+        json.dump(ss, g)
+        g.close()
+
+        predicted_price=(application.index())
+        print("predicted_price")
+        print(predicted_price)
+
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',r_city, r_prop, r_bhk, r_min_price, r_max_price,r_locality)
         sql_query=query.fetchall() 
         if cursor.rowcount == 0:
