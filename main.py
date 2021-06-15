@@ -53,21 +53,20 @@ def buy():
         json.dump(ss, g)
         g.close()
         # {"city":"c","propert_y":"prop","bhk":0,"min_price":0,"max_price":0,"furnishing":"furnish","variable":0,"predicted_price":0}
-        predicted_price=(int)(application.index())
-      
-        print("predicted price")
-        print(predicted_price[0])
+        predicted_price=(application.index())
+        price=(int)(predicted_price[0])
+
         print("nearest id's:")
 
         for i in range (predicted_price[1].size):
             print(predicted_price[1][i])
 
-        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, min_price, max_price, locality)
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, furnish, min_price, max_price, locality)
         sql_query=query.fetchall() 
         if cursor.rowcount == 0:
             heading="NO MATCHES FOUND"
             error="true"
-        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error,price=predicted_price)
+        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error,price=price)
         cursor.close()
     return render_template('buy.html')
 
@@ -106,19 +105,18 @@ def rent():
         g.close()
 
         predicted_price=(application.index())
-        print("predicted price")
-        print(predicted_price[0])
+        price=(int)(predicted_price[0])
         print("nearest id's:")
 
         for i in range (predicted_price[1].size):
             print(predicted_price[1][i])
 
-        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',r_city, r_prop, r_bhk, r_min_price, r_max_price,r_locality)
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',r_city, r_prop, r_bhk, r_furnish, r_min_price, r_max_price,r_locality)
         sql_query=query.fetchall() 
         if cursor.rowcount == 0:
             heading="NO MATCHES FOUND"
             error="true"        
-        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error)
+        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error,price=price)
         cursor.close()
     return render_template('rent.html')
 
