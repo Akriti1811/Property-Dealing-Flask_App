@@ -12,14 +12,16 @@ from sklearn import neighbors
 import pyodbc
 import json
 
-# conn = pyodbc.connect(  'Driver={SQL Server Native Client 11.0};'
-#              'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
-#              'Database=Property_dealing;'
-#              'Trusted_Connection=yes;')
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
                          "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
+
+# conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
+#                          "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+#                          "Database=Property_dealing;"
+#                          "Trusted_Connection=yes;")
+
 
 cursor = conn.cursor()
 
@@ -35,14 +37,6 @@ def index():
         df=pd.read_sql_query("SELECT * FROM dbo.Buy_house",conn)
     else:
         df=pd.read_sql_query("SELECT * FROM dbo.Rent_house",conn)
-    
-    # df=pd.read_sql_query("SELECT * FROM dbo.Buy_house",conn)
-    # df=pd.read_sql_query("SELECT * FROM dbo.Rent_house",conn)
-    # df=pd.read_csv(r"C:\Users\SHIVANI SINGH\Documents\Buy_house.csv")
-    # df=pd.read_csv(r"C:\Users\SHIVANI SINGH\Documents\Rent_house.csv")
-    
-    correlation_matrix = df.corr()  
-    # print(correlation_matrix)
     
     H=drop_fun(df)
     M=pd.get_dummies(H) # For categorical data
@@ -80,9 +74,7 @@ def drop_fun(L):
     
     M=M.drop("parking",axis='columns')
     M=M.drop("user_id",axis='columns')
-    # M= M.drop("furnishing",axis='columns')
-    # M= M.drop("type",axis='columns')
-    # M=M.drop("bhk",axis='columns')
+    
     return M
 
 
@@ -94,6 +86,7 @@ def best_value_of_k(X_train,y_train,X_test,y_test):
         model=neighbors.KNeighborsRegressor(n_neighbors=k)
         model.fit(X_train, y_train)  #fit the model
         pred=model.predict(X_test) #make prediction on test set
+        
         # print(model.score(X_test, y_test))
         error = sqrt(mean_squared_error(y_test,pred)) #calculate rmse
         rmse_val.append(error) #store rmse values
@@ -111,21 +104,17 @@ def best_value_of_k(X_train,y_train,X_test,y_test):
 def neighbouring_prices(g,X,y):
 
     Z=input_data()
-    # Z = np.array([3,3,900,1,0,0,0,1])  # for buy data
-    # Z = np.array([3,2,1000,0,1,0,0,0,1])  # for rent data
     distances = np.linalg.norm(X - Z, axis='1')
 
-    nearest_neighbor_ids = distances.argsort()[:g]
-    # print(nearest_neighbor_ids)
-    # print(type(nearest_neighbor_ids))
-    nearest_neighbor_price = y[nearest_neighbor_ids]
-    # print("neighbouring prices : ")
-    means=np.mean(nearest_neighbor_price)
-    # print(nearest_neighbor_price)
-    return means
+    nearest_neighbour_ids = distances.argsort()[:g]
+    nearest_neighbour_price = y[nearest_neighbour_ids]
+    
+    means=np.mean(nearest_neighbour_price)
+   
+    return means,nearest_neighbour_ids
 
 def input_data():
-    open_file=open('buy_input.json',"r")
+    open_file=open('buy_input.json')
     data_file=open_file.read()
     data=json.loads(data_file)
     
@@ -140,7 +129,7 @@ def input_data():
     
 
     if(data['variable']==0):
-        # print("buy")
+        
         Z=np.array([3,2,9,1,0,1,0,1])
         
         if(data['furnishing']=='Furnished'):
@@ -169,7 +158,7 @@ def input_data():
             Z[7]=0
         
     else:
-        # print("rent")
+    
         Z=np.array([3,2,9,1,0,1,0,1,0])
 
         if(data['furnishing']=='Furnished'):
@@ -206,6 +195,6 @@ def input_data():
     Z[0]=int(data['bhk'])
     Z[1]=bathroom
     Z[2]=area
-    # print(Z)
+
     return Z
     

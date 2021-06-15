@@ -24,7 +24,7 @@ cursor = conn.cursor()
 @app.route("/",methods=["POST","GET"])
 def buy():
 
-    f=open('buy_input.json',"r")  # using json file to store user input to be used by ML model
+    f=open('buy_input.json')  # using json file to store user input to be used by ML model
     data=f.read()
     ss=json.loads(data)
     f.close()
@@ -54,6 +54,13 @@ def buy():
         g.close()
         # {"city":"c","propert_y":"prop","bhk":0,"min_price":0,"max_price":0,"furnishing":"furnish","variable":0,"predicted_price":0}
         predicted_price=(int)(application.index())
+      
+        print("predicted price")
+        print(predicted_price[0])
+        print("nearest id's:")
+
+        for i in range (predicted_price[1].size):
+            print(predicted_price[1][i])
 
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, min_price, max_price, locality)
         sql_query=query.fetchall() 
@@ -67,7 +74,7 @@ def buy():
 @app.route("/rent",methods=["POST","GET"])
 def rent():
     
-    f=open('buy_input.json',"r")
+    f=open('buy_input.json')
     data=f.read()
     ss=json.loads(data)
     
@@ -99,8 +106,12 @@ def rent():
         g.close()
 
         predicted_price=(application.index())
-        print("predicted_price")
-        print(predicted_price)
+        print("predicted price")
+        print(predicted_price[0])
+        print("nearest id's:")
+
+        for i in range (predicted_price[1].size):
+            print(predicted_price[1][i])
 
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',r_city, r_prop, r_bhk, r_min_price, r_max_price,r_locality)
         sql_query=query.fetchall() 
