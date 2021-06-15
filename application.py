@@ -11,12 +11,15 @@ from sklearn import neighbors
 
 import pyodbc
 import json
-app = Flask(__name__)
 
-conn = pyodbc.connect(  'Driver={SQL Server Native Client 11.0};'
-             'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
-             'Database=Property_dealing;'
-             'Trusted_Connection=yes;')
+# conn = pyodbc.connect(  'Driver={SQL Server Native Client 11.0};'
+#              'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
+#              'Database=Property_dealing;'
+#              'Trusted_Connection=yes;')
+conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
+                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                         "Database=Property_dealing;"
+                         "Trusted_Connection=yes;")
 
 cursor = conn.cursor()
 
@@ -62,12 +65,6 @@ def index():
     g=best_value_of_k(X_train,y_train,X_test,y_test) #Best value of k to find number is neighbour
         
     mean_price=neighbouring_prices(g,X,y)  #Function predicts price 
-    # data['predicted_price']=mean_price
-    # g=open('buy_input.json',"w")
-    # json.dump(data, g)
-    # g.close()
-    # print("o")
-    # print(data['predicted_price'])
 
     # return H.to_html()
     return mean_price 
@@ -146,7 +143,7 @@ def input_data():
         # print("buy")
         Z=np.array([3,2,9,1,0,1,0,1])
         
-        if(data['furnishing']=='Full_furnished'):
+        if(data['furnishing']=='Furnished'):
             Z[3]=1
             Z[4]=0
             Z[5]=0
@@ -175,7 +172,7 @@ def input_data():
         # print("rent")
         Z=np.array([3,2,9,1,0,1,0,1,0])
 
-        if(data['furnishing']=='Full_furnished'):
+        if(data['furnishing']=='Furnished'):
             Z[3]=1
             Z[4]=0
             Z[5]=0

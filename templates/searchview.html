@@ -1,6 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
-<div class="pt-5 mx-5 mt-5">
+<div class="pt-5 mx-2 mt-5">
+    <div class="text-center alert alert-secondary mx-5" role="alert">
+        <h3 class="p-3">PREDICTED PRICE</h3>
+        <h6>According to your requirements the PREDICTED PRICE of your property is Rs.<strong>{{ price }}</strong></h6>
+        <p>(*This is just the predicted price based on the features of your property, it may differ a lot according to the locality and city.)</p>
+    </div>
+    <br>
 <h2 class="text-center">{{ heading }}</h2>
 {% if error %}
     <br><div class=" mx-5 alert alert-danger text-center"  role="alert">Sorry! We couldn't find any property according to your exact requirements. You can search for more properties.</div><br>
@@ -25,22 +31,22 @@
 
                     <div class="house-detail-card px-2 py-2">
                         <div class="d-flex flex-wrap">                
-                            <div class="col-md-3 col-12 px-4">
+                            <div class="col-md-3 col-12 px-2">
                                <h6>AREA</h6>
                                <p>{{ row[5] }} sqft</p>
                             </div>  
 
-                            <div class="col-md-3 col-12 px-4">
+                            <div class="col-md-3 col-12 px-2">
                                <h6>STATUS</h6>
                                <p>{{ row[9] }}</p>
                             </div>
 
-                            <div class="col-md-3 col-12 px-4">
+                            <div class="col-md-3 col-12 px-2">
                                <h6>FURNIHSING</h6>
                                <p>{{ row[7] }}</p>
                             </div>
                   
-                            <div class="col-md-3 col-12 px-4">
+                            <div class="col-md-3 col-12 px-2">
                                <h6>PARKING</h6>
                                <p>{{ row[4] }}</p>
                             </div>

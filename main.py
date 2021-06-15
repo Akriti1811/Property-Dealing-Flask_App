@@ -9,14 +9,14 @@ import application
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-conn = pyodbc.connect( 'Driver={SQL Server Native Client 11.0};'
-                        'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
-                        'Database=Property_dealing;'
-                        'Trusted_Connection=yes;')
-# conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-#                          "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
-#                          "Database=Property_dealing;"
-#                          "Trusted_Connection=yes;")
+# conn = pyodbc.connect( 'Driver={SQL Server Native Client 11.0};'
+#                         'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
+#                         'Database=Property_dealing;'
+#                         'Trusted_Connection=yes;')
+conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
+                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                         "Database=Property_dealing;"
+                         "Trusted_Connection=yes;")
 
 cursor = conn.cursor() 
  
@@ -40,14 +40,6 @@ def buy():
         min_price=request.form["Min_price"]
         max_price=request.form["Max_price"]
         furnish=request.form["furnishing"]
-
-        # query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, min_price, max_price, locality)
-        # sql_query=query.fetchall() 
-        # if cursor.rowcount == 0:
-        #     heading="NO MATCHES FOUND"
-        #     error="true"
-        # return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error)
-        
         
         # Updating json file
         ss['city']=city
@@ -61,17 +53,14 @@ def buy():
         json.dump(ss, g)
         g.close()
         # {"city":"c","propert_y":"prop","bhk":0,"min_price":0,"max_price":0,"furnishing":"furnish","variable":0,"predicted_price":0}
-        predicted_price=(application.index())
-        print("predicted_price")
-        print(predicted_price)
+        predicted_price=(int)(application.index())
 
-        
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, min_price, max_price, locality)
         sql_query=query.fetchall() 
         if cursor.rowcount == 0:
             heading="NO MATCHES FOUND"
             error="true"
-        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error)
+        return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error,price=predicted_price)
         cursor.close()
     return render_template('buy.html')
 
