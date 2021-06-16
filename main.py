@@ -188,6 +188,11 @@ def login():
 #             message = "Logged in successfully!"
 #     return render_template('login.html', message=message,error=error)
 
+@app.route("/logout")
+def logout():
+    session.pop('loggedin',None)
+    session.pop('userid',None)
+    return render_template("buy.html")
 
 @app.route("/signup", methods=['GET', 'POST'])
 def signup():
