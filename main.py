@@ -58,7 +58,7 @@ def buy():
         for i in range (predicted_price[1].size):
             print(predicted_price[1][i])
 
-        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, furnish, min_price, max_price, locality)
+        query= cursor.execute('''SELECT * hFROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, furnish, min_price, max_price, locality)
         sql_query=query.fetchall() 
         if cursor.rowcount == 0:
             heading="NO MATCHES FOUND"
