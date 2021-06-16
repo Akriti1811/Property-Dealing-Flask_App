@@ -9,12 +9,9 @@ import application
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-# conn = pyodbc.connect( 'Driver={SQL Server Native Client 11.0};'
-#                         'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
-#                         'Database=Property_dealing;'
-#                         'Trusted_Connection=yes;')
+
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                         "Server=DESKTOP-TS4AFA1;" # LAPTOP-EVDFGGHS\SQLEXPRESS  DESKTOP-PLT6RQC\SQLEXPRESS
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
 
@@ -279,18 +276,12 @@ def rent_lodging():
     sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house WHERE type='Lodging_property'",conn)
     return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
 
-@app.route("/propview")
-def propview():
+@app.route("/propview/<user_id>", methods=['GET', 'POST'])
+@app.route("/propview/")
+def propview(user_id=None):
     if g.loggedin:
-        return render_template('propview.html')
+        return render_template('propview.html', user_id = user_id)
     return redirect(url_for('login'))    
-
-# @app.route("/propview/<id>")
-# def propview(id):
-#     if g.loggedin:
-#         sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Buy_house INNER JOIN Property_dealing.dbo.Users ON Rent_house.user_id=Users.user_id WHERE user_id='id'",conn)
-#         return render_template('propview.html')     
-#     return redirect(url_for('login'))
 
 @app.before_request
 def before_request():

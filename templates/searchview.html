@@ -4,12 +4,14 @@
     <div class="text-center alert alert-secondary mx-5" role="alert">
         <h3 class="p-3">PREDICTED PRICE</h3>
         <h6>According to your requirements the PREDICTED PRICE of your property is Rs.<strong>{{ price }}</strong></h6>
-        <p>(*This is just the predicted price based on the features of your property, it may differ a lot according to the locality and city.)</p>
+        <p>(*This is just the predicted price based on the features of your property, 
+            it may differ a lot according to the locality and city.)</p>
     </div>
     <br>
 <h2 class="text-center">{{ heading }}</h2>
 {% if error %}
-    <br><div class=" mx-5 alert alert-danger text-center"  role="alert">Sorry! We couldn't find any property according to your exact requirements. You can search for more properties.</div><br>
+    <br><div class=" mx-5 alert alert-danger text-center"  role="alert">Sorry! We couldn't find any 
+        property according to your exact requirements. You can search for more properties.</div><br>
     <div class="text-center"><p>Visit our home page <a href="/">Home</a></p></div><br>
 {% endif %}
     {%for row in data:%}
@@ -51,24 +53,12 @@
                                <p>{{ row[4] }}</p>
                             </div>
                             
-                            <!-- <script src="buy_input.json">
-                                // f=open('buy_input.json')
-                                // data=f.read()
-                                // ss=json.loads(data)
-                                print("hello")
-                                ss['user_id']=row[11]
-                                g=open('buy_input.json',"w")
-                                json.dump(ss, g)
-                                g.close()
-                                print(ss['user_id'])
-                            </script> -->
                         </div> 
                     </div>
 
                     <div>
-                        <a href="/propview" class=" btn btn-outline-info">Contact Owner</a>
+                        <a href="/propview/{{row[0]}}", class=" btn btn-outline-info">Contact Owner</a>
                     </div>
-
                 </div>
             </div>
 
