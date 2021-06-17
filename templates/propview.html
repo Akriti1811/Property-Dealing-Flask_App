@@ -7,12 +7,12 @@
         <div class="card m-2 px-3 py-3">
 
             <div class="text-center">
-                <h5 class="card-title"> bhk BHK type </h5>
-                <p class="card-text ">For pro_for in locality,city</p>    
+                <h5 class="card-title">{{data[2]}} BHK {{data[10]}} </h5>
+                <p class="card-text ">For {{pro_for}} in {{data[6]}}, {{data[1]}}</p>    
             </div><br>
 
             <div>
-                <h4 class="px-5">PRICE - Rs. price</h4>
+                <h4 class="px-5">PRICE - Rs. {{data[8]}}</h4>
             </div><br>
 
             <div class="row py-2">
@@ -28,17 +28,17 @@
                             <div class="d-flex flex-wrap">                
                                 <div class="col-md-4 col-12 px-4">
                                    <h6>AREA</h6>
-                                   <p>area  sqft</p>
+                                   <p>{{data[5]}} sqft</p>
                                 </div>  
     
                                 <div class="col-md-4 col-12 px-4">
                                    <h6>BATHROOM</h6>
-                                   <p> 1 </p>
+                                   <p>{{data[3]}}</p>
                                 </div>
                       
                                 <div class="col-md-4 col-12 px-4">
                                    <h6>PARKING</h6>
-                                   <p>parking </p>
+                                   <p>{{data[4]}}</p>
                                 </div>
                             </div> 
                         </div>
@@ -50,12 +50,12 @@
 
                                 <div class="col-md-4 col-12 px-4">
                                    <h6>STATUS</h6>
-                                   <p> status </p>
+                                   <p> {{data[9]}}</p>
                                 </div>
     
                                 <div class="col-md-4 col-12 px-4">
                                    <h6>FURNIHSING</h6>
-                                   <p>furnishing </p>
+                                   <p>{{data[7]}}</p>
                                 </div>
                       
                                 
@@ -70,9 +70,9 @@
             <div class=" px-5 py-2">
                 <h3 class=" px-5 pt-4 pd-2"><u>OWNER DETAILS</h3></u></h3>
                 <div class="m-2 px-3 py-3">    
-                    <p><strong>Name - </strong>Abc</p>
-                    <p><strong>Phone Number - </strong>99********</p>
-                    <p><strong>Email-id - </strong>demo@gmail.com</p>
+                    <p><strong>Name - </strong>{{data[13]}}</p>
+                    <p><strong>Phone Number - </strong>{{data[15]}}</p>
+                    <p><strong>Email-id - </strong>{{data[14]}}</p>
                 </div>
             </div>
         </div>

@@ -9,11 +9,18 @@ import application
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-
+#  conn = pyodbc.connect(  'Driver={SQL Server Native Client 11.0};'
+#                          'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
+#                          'Database=Property_dealing;'
+#                          'Trusted_Connection=yes;')
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                         "Server=DESKTOP-TS4AFA1;" # LAPTOP-EVDFGGHS\SQLEXPRESS  DESKTOP-PLT6RQC\SQLEXPRESS
+                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
+# conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
+#                          "Server=DESKTOP-TS4AFA1;" # LAPTOP-EVDFGGHS\SQLEXPRESS  DESKTOP-PLT6RQC\SQLEXPRESS
+#                          "Database=Property_dealing;"
+#                          "Trusted_Connection=yes;")
 
 cursor = conn.cursor() 
  
@@ -276,11 +283,17 @@ def rent_lodging():
     sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house WHERE type='Lodging_property'",conn)
     return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
 
-@app.route("/propview/<user_id>", methods=['GET', 'POST'])
-@app.route("/propview/")
-def propview(user_id=None):
+@app.route("/propview/<pro_for>/<user_id>", methods=['GET', 'POST'])
+# @app.route("/propview/")
+def propview(user_id=None,pro_for=None):
     if g.loggedin:
-        return render_template('propview.html', user_id = user_id)
+        if pro_for=='Sale':
+            query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house,Property_dealing.dbo.Users WHERE Property_dealing.dbo.Users.user_id=Property_dealing.dbo.Buy_house.user_id AND Property_dealing.dbo.Users.user_id= ? ''',user_id)
+        else:
+            query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house,Property_dealing.dbo.Users WHERE Property_dealing.dbo.Users.user_id=Property_dealing.dbo.Rent_house.user_id AND Property_dealing.dbo.Users.user_id= ? ''',user_id)
+        
+        sql_query=query.fetchone() 
+        return render_template('propview.html',data=sql_query,pro_for=pro_for)
     return redirect(url_for('login'))    
 
 @app.before_request

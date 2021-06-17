@@ -12,10 +12,18 @@ from sklearn import neighbors
 import pyodbc
 import json
 
+#  conn = pyodbc.connect(  'Driver={SQL Server Native Client 11.0};'
+#                          'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
+#                          'Database=Property_dealing;'
+#                          'Trusted_Connection=yes;')
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                         "Server=DESKTOP-TS4AFA1;" # LAPTOP-EVDFGGHS\SQLEXPRESS  DESKTOP-PLT6RQC\SQLEXPRESS
+                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
+# conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
+#                          "Server=DESKTOP-TS4AFA1;" # LAPTOP-EVDFGGHS\SQLEXPRESS  DESKTOP-PLT6RQC\SQLEXPRESS
+#                          "Database=Property_dealing;"
+#                          "Trusted_Connection=yes;")
 
 cursor = conn.cursor()
 
