@@ -160,7 +160,24 @@ def post():
                 conn.commit()    
         return render_template('post.html', message=message)
     return redirect(url_for('login'))
-    
+
+@app.route("/profile",methods=["POST","GET"])
+def profile():
+    if g.loggedin:
+        user_id=session['userid']
+        message=None
+        if request.method == "POST":
+            name=request.form["Name"]
+            Email=request.form["Email"]
+            number=request.form["Number"]
+            password=request.form["Password"]
+            cursor.execute('''UPDATE Property_dealing.dbo.Users SET  name= ?, Email_id= ?, Phone_no= ?, password=? WHERE user_id= ?''', name, Email, number, password,user_id)
+            conn.commit()
+            message="Changes saved Successfully!"
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Users WHERE  user_id= ? ''',user_id)
+        sql_query=query.fetchone() 
+        return render_template('profile.html',data=sql_query,message=message)
+    return redirect(url_for('login'))  
        
 @app.route("/login", methods=['GET', 'POST'])
 def login():
