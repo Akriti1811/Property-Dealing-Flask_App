@@ -9,18 +9,12 @@ import application
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-#  conn = pyodbc.connect(  'Driver={SQL Server Native Client 11.0};'
-#                          'Server=LAPTOP-EVDFGGHS\SQLEXPRESS;'
-#                          'Database=Property_dealing;'
-#                          'Trusted_Connection=yes;')
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
                          "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                        #  "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
+                        #  "Server=DESKTOP-TS4AFA1;"
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
-# conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-#                          "Server=DESKTOP-TS4AFA1;" # LAPTOP-EVDFGGHS\SQLEXPRESS  DESKTOP-PLT6RQC\SQLEXPRESS
-#                          "Database=Property_dealing;"
-#                          "Trusted_Connection=yes;")
 
 cursor = conn.cursor() 
  
@@ -65,7 +59,7 @@ def buy():
         for i in range (predicted_price[1].size):
             print(predicted_price[1][i])
 
-        query= cursor.execute('''SELECT * hFROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, furnish, min_price, max_price, locality)
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, furnish, min_price, max_price, locality)
         sql_query=query.fetchall() 
         if cursor.rowcount == 0:
             heading="NO MATCHES FOUND"
