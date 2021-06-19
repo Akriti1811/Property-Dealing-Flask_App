@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 <div class="pt-5 mx-2 mt-5">
-    <div class="text-center alert alert-secondary mx-5" role="alert">
+    <div class="text-center alert alert-secondary col-md-9 mx-auto" role="alert">
         <h3 class="p-3">PREDICTED PRICE</h3>
         <h6>According to your requirements the PREDICTED PRICE of your property is Rs.<strong>{{ price }}</strong></h6>
         <p>(*This is just the predicted price based on the features of your property, 
@@ -10,7 +10,7 @@
     <br>
 <h2 class="text-center">{{ heading }}</h2>
 {% if error %}
-    <br><div class=" mx-5 alert alert-danger text-center"  role="alert">Sorry! We couldn't find any 
+    <br><div class="alert alert-danger text-center col-md-7 mx-auto"  role="alert">Sorry! We couldn't find any 
         property according to your exact requirements. You can search for more properties.</div><br>
     <div class="text-center"><p>Visit our home page <a href="/">Home</a></p></div><br>
 {% endif %}
@@ -57,7 +57,7 @@
                     </div>
 
                     <div>
-                        <a href="/propview/{{pro_for}}/{{row[11]}}", class=" btn btn-outline-info">Contact Owner</a>
+                        <a href="/propview/{{pro_for}}/{{row[11]}}/{{row[0]}}", class=" btn btn-outline-info">Contact Owner</a>
                     </div>
                 </div>
             </div>

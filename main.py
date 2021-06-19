@@ -62,6 +62,8 @@ def buy():
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, furnish, min_price, max_price, locality)
         sql_query=query.fetchall() 
         if cursor.rowcount == 0:
+            # query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE property_no IN ? ''',predicted_price[1])
+            # sql_query=query.fetchall()
             heading="NO MATCHES FOUND"
             error="true"
         return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error,price=price)
@@ -173,6 +175,86 @@ def profile():
         return render_template('profile.html',data=sql_query,message=message)
     return redirect(url_for('login'))  
        
+@app.route("/user_saleprop",methods=["POST","GET"])
+def user_saleprop():
+    if g.loggedin:
+        heading= "MY PROPERTIES"
+        pro_for="Sale"
+        sale="true"
+        error=None
+        user_id=session['userid']
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE  user_id= ? ''',user_id)
+        sql_query=query.fetchall() 
+        if cursor.rowcount == 0:
+            heading="YOU HAVEN'T POSTED ANY PROPERTY FOR SALE YET"
+            error="true"
+        return render_template('userprop.html',data=sql_query,heading=heading,error=error,pro_for=pro_for,Sale=sale)
+    return redirect(url_for('login'))  
+
+@app.route("/user_rentprop",methods=["POST","GET"])
+def user_rentprop():
+    if g.loggedin:
+        heading= "MY PROPERTIES"
+        pro_for="Rent"
+        rent="true"
+        error=None
+        user_id=session['userid']
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house WHERE  user_id= ? ''',user_id)
+        sql_query=query.fetchall() 
+        if cursor.rowcount == 0:
+            heading="YOU HAVEN'T POSTED ANY PROPERTY FOR RENT YET"
+            error="true"
+        return render_template('userprop.html',data=sql_query,heading=heading,error=error,pro_for=pro_for,Rent=rent)
+    return redirect(url_for('login')) 
+
+@app.route("/edit_prop/<pro_for>/<user_id>/<prop_no>",methods=["POST","GET"])
+def edit_prop(user_id=None,pro_for=None,prop_no=None):
+    heading= "MY PROPERTIES"
+    user_id=session['userid']
+    message=None
+    sale=None
+    rent=None
+    p_no=int(prop_no)
+    if request.method == "POST":
+        city=request.form["city"]
+        prop_type=request.form["property_type"]
+        bhk=request.form["bhk"]
+        purpose=request.form["gridRadios"]
+        locality=request.form["locality"]
+        area=request.form["area"]
+        price=request.form["price"]
+        bathroom=request.form["bathroom"]
+        parking=request.form["parking"]
+        furnishing=request.form["furnishing"]
+        status=request.form["status"]
+        if prop_type=="Lodging_property":
+            purpose="Rent"
+        if purpose=="Sale":
+            cursor.execute('''UPDATE Property_dealing.dbo.Buy_house SET city= ? , bhk= ? , bathroom= ? , parking= ? , area= ? , locality= ? , furnishing= ? , price= ?, status= ?, type= ? WHERE property_no= ?''', city, bhk, bathroom, parking, area, locality, furnishing, price, status, prop_type, prop_no)
+        else:
+             cursor.execute('''UPDATE Property_dealing.dbo.Rent_house SET city= ? , bhk= ? , bathroom= ? , parking= ? , area= ? , locality= ? , furnishing= ? , price= ?, status= ?, type= ? WHERE property_no= ?''', city, bhk, bathroom, parking, area, locality, furnishing, price, status, prop_type, prop_no)
+
+        conn.commit()
+        message="Changes saved Successfully!"
+
+    if pro_for=='Sale':
+        sale="true"
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house,Property_dealing.dbo.Users WHERE Property_dealing.dbo.Users.user_id=Property_dealing.dbo.Buy_house.user_id AND Property_dealing.dbo.Users.user_id= ? AND Property_dealing.dbo.Buy_house.property_no= ? ''',user_id,prop_no)
+    else:
+        rent="true"
+        query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house,Property_dealing.dbo.Users WHERE Property_dealing.dbo.Users.user_id=Property_dealing.dbo.Rent_house.user_id AND Property_dealing.dbo.Users.user_id= ? AND Property_dealing.dbo.Rent_house.property_no= ? ''',user_id,prop_no)  
+    sql_query=query.fetchone() 
+    return render_template('editprop.html',data=sql_query,message=message,heading=heading,sale=sale,rent=rent) 
+
+@app.route("/delete_prop/<pro_for>/<prop_no>",methods=["POST","GET"])
+def delete_prop(pro_for=None,prop_no=None):
+    if pro_for=="Sale":
+        cursor.execute('''DELETE FROM Property_dealing.dbo.Buy_house WHERE property_no= ? ''',prop_no)
+    else:
+        cursor.execute('''DELETE FROM Property_dealing.dbo.Rent_house WHERE property_no= ? ''',prop_no)
+    conn.commit()
+    return redirect(url_for('user_saleprop')) 
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     message = None
@@ -192,16 +274,6 @@ def login():
             error = "Error: Invalid Credentials. Please try again."
 
     return render_template('login.html', message=message,error=error)
-
-# def login():                 #HARD-CODED login function                          
-#     message = None
-#     error = None
-#     if request.method == 'POST':
-#         if request.form['Email'] != 'admin' or request.form['Password'] != 'admin':
-#             error = 'Error: Invalid Credentials. Please try again.'
-#         else:
-#             message = "Logged in successfully!"
-#     return render_template('login.html', message=message,error=error)
 
 @app.route("/logout")
 def logout():
@@ -230,6 +302,18 @@ def signup():
         cursor.execute('''INSERT INTO Property_dealing.dbo.Users (user_id, name, Email_id, Phone_no, password) VALUES(?, ?, ?, ?, ?)''',user_id, name, Email, number, password)
         conn.commit()
     return render_template('signup.html',message=message, error=error)
+
+@app.route("/propview/<pro_for>/<user_id>/<prop_no>", methods=['GET', 'POST'])
+def propview(user_id=None,pro_for=None,prop_no=None):
+    if g.loggedin:
+        if pro_for=='Sale':
+            query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house,Property_dealing.dbo.Users WHERE Property_dealing.dbo.Users.user_id=Property_dealing.dbo.Buy_house.user_id AND Property_dealing.dbo.Users.user_id= ? AND Property_dealing.dbo.Buy_house.property_no= ? ''',user_id,prop_no)
+        else:
+            query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house,Property_dealing.dbo.Users WHERE Property_dealing.dbo.Users.user_id=Property_dealing.dbo.Rent_house.user_id AND Property_dealing.dbo.Users.user_id= ? AND Property_dealing.dbo.Rent_house.property_no= ? ''',user_id,prop_no)
+        
+        sql_query=query.fetchone() 
+        return render_template('propview.html',data=sql_query,pro_for=pro_for)
+    return redirect(url_for('login'))    
 
 @app.route("/buy_own_pro")
 def buy_own_pro():
@@ -294,18 +378,6 @@ def rent_lodging():
     sql_query= pd.read_sql_query("SELECT * FROM Property_dealing.dbo.Rent_house WHERE type='Lodging_property'",conn)
     return render_template('cardview.html',data=sql_query ,pro_for=pro_for ,heading=heading)
 
-@app.route("/propview/<pro_for>/<user_id>", methods=['GET', 'POST'])
-# @app.route("/propview/")
-def propview(user_id=None,pro_for=None):
-    if g.loggedin:
-        if pro_for=='Sale':
-            query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house,Property_dealing.dbo.Users WHERE Property_dealing.dbo.Users.user_id=Property_dealing.dbo.Buy_house.user_id AND Property_dealing.dbo.Users.user_id= ? ''',user_id)
-        else:
-            query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house,Property_dealing.dbo.Users WHERE Property_dealing.dbo.Users.user_id=Property_dealing.dbo.Rent_house.user_id AND Property_dealing.dbo.Users.user_id= ? ''',user_id)
-        
-        sql_query=query.fetchone() 
-        return render_template('propview.html',data=sql_query,pro_for=pro_for)
-    return redirect(url_for('login'))    
 
 @app.before_request
 def before_request():
