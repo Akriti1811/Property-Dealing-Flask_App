@@ -10,8 +10,8 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
-                        #  "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
+                        #  "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                        "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
                         #  "Server=DESKTOP-TS4AFA1;"
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
@@ -53,11 +53,12 @@ def buy():
         # {"city":"c","propert_y":"prop","bhk":0,"min_price":0,"max_price":0,"furnishing":"furnish","variable":0,"predicted_price":0}
         predicted_price=(application.index())
         price=(int)(predicted_price[0])
-
-        print("nearest id's:")
-
+        
+        print("property_no :")
+        array=[]
         for i in range (predicted_price[1].size):
-            print(predicted_price[1][i])
+            array.append(int(predicted_price[1][i]))
+        print(array)
 
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, furnish, min_price, max_price, locality)
         sql_query=query.fetchall() 
@@ -108,8 +109,11 @@ def rent():
         price=(int)(predicted_price[0])
         print("nearest id's:")
 
+        print("property_no :")
+        array=[]
         for i in range (predicted_price[1].size):
-            print(predicted_price[1][i])
+            array.append(int(predicted_price[1][i]))
+        print(array)
 
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',r_city, r_prop, r_bhk, r_furnish, r_min_price, r_max_price,r_locality)
         sql_query=query.fetchall() 

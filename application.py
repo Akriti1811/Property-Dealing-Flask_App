@@ -13,8 +13,8 @@ import pyodbc
 import json
 
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
-                        #  "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
+                        #  "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                        "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
                         #  "Server=DESKTOP-TS4AFA1;"
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
@@ -34,6 +34,8 @@ def index():
     else:
         df=pd.read_sql_query("SELECT * FROM dbo.Rent_house",conn)
     
+    area=df['area'].mean()
+    
     H=drop_fun(df)
     M=pd.get_dummies(H) # For categorical data
     y = M.iloc[:,3].values  #indepemdent variable
@@ -49,15 +51,36 @@ def index():
     imputer = SimpleImputer(missing_values=np.nan, strategy='mean') #Handle missing data
     imputer = imputer.fit(X)
     X = imputer.transform(X)
+    
+    # CONVERTING numpyarray INTO dataframe
+    if(data['variable']==0):
+        X=pd.DataFrame(X,columns=['bhk','bathroom','area','furnishing_Furnished','furnishing_Semi_furnished','furnishing_Unfurnished','type_Apartment','type_Builder_Floor'])
+    else:
+        X=pd.DataFrame(X,columns=['bhk','bathroom','area','furnishing_Furnished','furnishing_Semi_furnished','furnishing_Unfurnished','type_Apartment','type_Builder_Floor','type_Lodging_property'])
 
+    y=pd.DataFrame(y,columns=['price'])
+
+    
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
             
     g=best_value_of_k(X_train,y_train,X_test,y_test) #Best value of k to find number is neighbour
         
-    mean_price=neighbouring_prices(g,X,y)  #Function predicts price 
+    
+    ids=neighbouring_prices(g,X,y,area)    # GIVES NEAREST NEIGHBOUR ID'S
+    
+    nearest_negh_df=pd.DataFrame()  # EMPTY DATAFRAME
 
-    # return H.to_html()
-    return mean_price 
+    for i in range(g):                  # STORE NEAREST NEIGHBOUR IN A DATAFRAME
+        pf=df.iloc[ids[i]]
+        temp=nearest_negh_df.append(pf,ignore_index=True)
+        nearest_negh_df=temp
+   
+    means=nearest_negh_df['price'].mean()
+    mn=nearest_negh_df['property_no']
+   
+    # return nearest_negh_df.to_html()
+    return means,mn
+    
     
 
 
@@ -82,13 +105,12 @@ def best_value_of_k(X_train,y_train,X_test,y_test):
         model=neighbors.KNeighborsRegressor(n_neighbors=k)
         model.fit(X_train, y_train)  #fit the model
         pred=model.predict(X_test) #make prediction on test set
-        
-        # print(model.score(X_test, y_test))
         error = sqrt(mean_squared_error(y_test,pred)) #calculate rmse
         rmse_val.append(error) #store rmse values
         # print('RMSE value for k= ' , k , 'is:', error)
-        p=min(rmse_val)
-        # print(p)
+        # p=min(rmse_val)
+    p=min(rmse_val)
+    # print(model.score(X_test,y_test))
     for m in range(20):
         if(rmse_val[m]==p):
             # print(m)
@@ -97,25 +119,27 @@ def best_value_of_k(X_train,y_train,X_test,y_test):
     return t
 
 
-def neighbouring_prices(g,X,y):
+def neighbouring_prices(g,X,y,area):
 
-    Z=input_data()
+    Z=input_data(area)
     distances = np.linalg.norm(X - Z, axis='1')
 
     nearest_neighbour_ids = distances.argsort()[:g]
-    nearest_neighbour_price = y[nearest_neighbour_ids]
+    return nearest_neighbour_ids
     
-    means=np.mean(nearest_neighbour_price)
-   
-    return means,nearest_neighbour_ids
+    # nearest_neighbour_price = y[nearest_neighbour_ids]  
+    # means=np.mean(nearest_neighbour_price)
+    # return nearest_neighbour_ids
+    # return means,nearest_neighbour_ids
 
-def input_data():
+def input_data(Area):
     open_file=open('buy_input.json')
     data_file=open_file.read()
     data=json.loads(data_file)
     
     bathroom=0
-    area=(int(data['bhk'])*270)
+    # area=(int(data['bhk'])*Area)
+    area=Area/2
     if(data['bhk']==1):
         bathroom=1
     elif(data['bhk']==2):
