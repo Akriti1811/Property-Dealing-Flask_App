@@ -55,7 +55,6 @@ def buy():
         
         print("property_no :")
         array=[]
-        jk=[]
         for i in range (predicted_price[1].size):
             array.append(int(predicted_price[1][i]))
             
@@ -63,10 +62,10 @@ def buy():
         placeholders = ", ".join(["?"] * len(array))
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, furnish, min_price, max_price, locality)
         sql_query=query.fetchall() 
-        print(type(sql_query))
-        if cursor.rowcount == 0:            
+        
+        if cursor.rowcount == 0:
             sql='''SELECT * FROM Property_dealing.dbo.Buy_house WHERE property_no  IN (''' + placeholders + ")"
-            query=cursor.execute(sql,array)
+            query = cursor.execute(sql, array)
             sql_query=query.fetchall()
             heading="NO MATCHES FOUND"
             error="true"
@@ -114,6 +113,7 @@ def rent():
 
         print("property_no :")
         array=[]
+        placeholders = ", ".join(["?"] * len(array))
         for i in range (predicted_price[1].size):
             array.append(int(predicted_price[1][i]))
         print(array)
@@ -122,8 +122,12 @@ def rent():
         sql_query=query.fetchall() 
         print(type(sql_query))
         if cursor.rowcount == 0:
+            sql='''SELECT * FROM Property_dealing.dbo.Buy_house WHERE property_no  IN (''' + placeholders + ")"
+            query = cursor.execute(sql, array)
+            sql_query=query.fetchall()
             heading="NO MATCHES FOUND"
             error="true"        
+           
         return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error,price=price)
         cursor.close()
     return render_template('rent.html')
