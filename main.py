@@ -10,8 +10,8 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
-                        # "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
+                        #  "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                        "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
                         #  "Server=DESKTOP-TS4AFA1;"
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
@@ -113,16 +113,17 @@ def rent():
 
         print("property_no :")
         array=[]
-        placeholders = ", ".join(["?"] * len(array))
+        
         for i in range (predicted_price[1].size):
             array.append(int(predicted_price[1][i]))
         print(array)
+        placeholders = ", ".join(["?"] * len(array))
 
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',r_city, r_prop, r_bhk, r_furnish, r_min_price, r_max_price,r_locality)
         sql_query=query.fetchall() 
         print(type(sql_query))
         if cursor.rowcount == 0:
-            sql='''SELECT * FROM Property_dealing.dbo.Buy_house WHERE property_no  IN (''' + placeholders + ")"
+            sql='''SELECT * FROM Property_dealing.dbo.Rent_house WHERE property_no  IN (''' + placeholders + ")"
             query = cursor.execute(sql, array)
             sql_query=query.fetchall()
             heading="NO MATCHES FOUND"
