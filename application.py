@@ -13,8 +13,8 @@ import pyodbc
 import json
 
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                        #  "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
-                        "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
+                        "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                        # "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
                         #  "Server=DESKTOP-TS4AFA1;"
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
