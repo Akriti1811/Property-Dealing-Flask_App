@@ -10,8 +10,8 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                        #  "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
-                        "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
+                         "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                        # "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
                         #  "Server=DESKTOP-TS4AFA1;"
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
@@ -67,7 +67,6 @@ def buy():
             sql='''SELECT * FROM Property_dealing.dbo.Buy_house WHERE property_no  IN (''' + placeholders + ")"
             query = cursor.execute(sql, array)
             sql_query=query.fetchall()
-            heading="NO MATCHES FOUND"
             error="true"
         return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error,price=price)
         cursor.close()
@@ -126,7 +125,6 @@ def rent():
             sql='''SELECT * FROM Property_dealing.dbo.Rent_house WHERE property_no  IN (''' + placeholders + ")"
             query = cursor.execute(sql, array)
             sql_query=query.fetchall()
-            heading="NO MATCHES FOUND"
             error="true"        
            
         return render_template('searchview.html',data=sql_query ,pro_for=pro_for ,heading=heading,error=error,price=price)

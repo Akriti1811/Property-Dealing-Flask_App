@@ -13,8 +13,8 @@ import pyodbc
 import json
 
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                        # "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
-                        "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
+                        "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                        # "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
                         #  "Server=DESKTOP-TS4AFA1;"
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
@@ -33,7 +33,7 @@ def index():
         df=pd.read_sql_query("SELECT * FROM dbo.Buy_house",conn)
     else:
         df=pd.read_sql_query("SELECT * FROM dbo.Rent_house",conn)
-    
+    # print(df)
     area=df['area'].mean()
     
     H=drop_fun(df)
@@ -61,7 +61,7 @@ def index():
     y=pd.DataFrame(y,columns=['price'])
 
     
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.32, random_state=0)
             
     g=best_value_of_k(X_train,y_train,X_test,y_test) #Best value of k to find number is neighbour
         
@@ -78,6 +78,7 @@ def index():
     means=nearest_negh_df['price'].mean()
     mn=nearest_negh_df['property_no']
    
+    # return X.to_html()
     # return nearest_negh_df.to_html()
     return means,mn
     
@@ -100,7 +101,6 @@ def drop_fun(L):
 def best_value_of_k(X_train,y_train,X_test,y_test):
     rmse_val = [] #to store rmse values for different k
     for k in range(20):
-
         k=k+1
         model=neighbors.KNeighborsRegressor(n_neighbors=k)
         model.fit(X_train, y_train)  #fit the model
@@ -108,12 +108,13 @@ def best_value_of_k(X_train,y_train,X_test,y_test):
         error = sqrt(mean_squared_error(y_test,pred)) #calculate rmse
         rmse_val.append(error) #store rmse values
         # print('RMSE value for k= ' , k , 'is:', error)
-        # p=min(rmse_val)
+
     p=min(rmse_val)
+    # print(p)
     # print(model.score(X_test,y_test))
     for m in range(20):
         if(rmse_val[m]==p):
-            # print(m)
+            print(m)
             t=m
     
     return t
@@ -125,6 +126,7 @@ def neighbouring_prices(g,X,y,area):
     distances = np.linalg.norm(X - Z, axis='1')
 
     nearest_neighbour_ids = distances.argsort()[:g]
+    # print( nearest_neighbour_ids)
     return nearest_neighbour_ids
     
     # nearest_neighbour_price = y[nearest_neighbour_ids]  
@@ -138,8 +140,8 @@ def input_data(Area):
     data=json.loads(data_file)
     
     bathroom=0
-    # area=(int(data['bhk'])*Area)
-    area=Area/2
+    area=(int(data['bhk'])*270)
+    # area=Area/2
     if(data['bhk']==1):
         bathroom=1
     elif(data['bhk']==2):
