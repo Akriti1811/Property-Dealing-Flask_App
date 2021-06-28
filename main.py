@@ -10,8 +10,8 @@ app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
 conn = pyodbc.connect("Driver={SQL Server Native Client 11.0};"
-                        # "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
-                        "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
+                        "Server=DESKTOP-PLT6RQC\SQLEXPRESS;"
+                        # "Server=LAPTOP-EVDFGGHS\SQLEXPRESS;"
                         # "Server=DESKTOP-TS4AFA1;"
                          "Database=Property_dealing;"
                          "Trusted_Connection=yes;")
@@ -157,10 +157,6 @@ def signup():
 def login():
     message = None
     error = None
-    f=open('buy_input.json')  # using json file to store user input to be used by ML model
-    data=f.read()
-    jk=json.loads(data)
-    f.close()
     if request.method == 'POST' and 'Email' in request.form and 'Password' in request.form:
         Email = request.form['Email']
         password = request.form['Password']
@@ -172,20 +168,8 @@ def login():
             session['loggedin'] = True
             session['userid'] = account[0]
             message = "Logged in successfully!"       
-            jk['status']="true"
-            # g=open('buy_input.json',"w")
-            # json.dump(jk, g)
-            # g.close()
         else:
             error = "Error: Invalid Credentials. Please try again."
-            jk['status']="false"
-        g=open('buy_input.json',"w")
-        json.dump(jk, g)
-        g.close()
-        
-
-        
-
     return render_template('login.html', message=message,error=error)
 
 @app.route("/logout")

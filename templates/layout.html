@@ -62,18 +62,23 @@
             <li class="nav-item-1">
               <a class="nav-link btn-outline-warning" href="/post">Post Property</a>
             </li>
+            {% if session['loggedin'] %}   
             <li class="nav-item-1 dropdown" >
               <a class="nav-link dropdown-toggle btn-outline-warning" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Login
+                Profile
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li><a class="dropdown-item" href="/profile">My Profile</a></li>
                 <li><a class="dropdown-item" href="/user_saleprop">My Properties</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/login">Login</a></li>
-                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                <li><hr class="dropdown-divider"></li>               
+                <li><a class="dropdown-item" href="/logout">Logout</a></li>    
               </ul>
             </li>
+            {% else %} 
+            <li class="nav-item-1">
+              <a class="nav-link btn-outline-warning" href="/login">Login</a>
+            </li>
+            {% endif %} 
             <li class="nav-item-1">
               <a class="nav-link btn-outline-warning" href="/signup">Sign Up</a>
             </li>
