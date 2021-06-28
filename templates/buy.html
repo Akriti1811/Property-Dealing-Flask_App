@@ -31,6 +31,7 @@
 
         <form class="col-5" action="" method="POST">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+          
           <div>
             <select required id="city" class="form-select" aria-label="Default select example" name="city">
               <option selected disabled value="">City</option>
@@ -38,22 +39,23 @@
               <option value="Delhi">Delhi</option>
             </select><br>
           </div>
-        
-          <div>
+          <div class="row">
+          <div class="col">
             <select id="locality" class="form-select" aria-label="Default select example" name="locality">
               <option selected disabled value="">Locality</option>
             </select><br>
           </div>
-
-          <div>
+          
+          <div class="col">
             <select required class="form-select" aria-label="Default select example" name="property_type">
               <option selected disabled value="">Property Type </option>
               <option value="Apartment">Apartment</option>
               <option value="Builder_Floor">Builder_Floor</option>
             </select><br>
           </div>
-
-          <div>
+        </div>
+          <div class="row">
+          <div class="col">
             <select required class="form-select" aria-label="Default select example" name="bhk">
               <option selected disabled value="">BHK</option>
               <option value="1">1BHK</option>
@@ -63,8 +65,8 @@
               <option value="5">5BHK</option>
             </select><br>
           </div>
-
-          <div>
+        
+          <div class="col">
             <select required class="form-select" aria-label="Default select example" name="furnishing">
               <option selected disabled value ="">Furnishing</option>
               <option value="Furnished">Furnished</option>
@@ -72,7 +74,7 @@
               <option value="Unfurnished">Unfurnished</option>
             </select><br>
           </div>
-             
+        </div>  
           <div>
             <div class="row">
               <div class="col">
