@@ -53,12 +53,10 @@ def buy():
         predicted_price=(application.index())
         price=(int)(predicted_price[0])
         
-        print("property_no :")
         array=[]
         for i in range (predicted_price[1].size):
             array.append(int(predicted_price[1][i]))
             
-        print(array)
         placeholders = ", ".join(["?"] * len(array))
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Buy_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',city, prop, bhk, furnish, min_price, max_price, locality)
         sql_query=query.fetchall() 
@@ -108,19 +106,15 @@ def rent():
 
         predicted_price=(application.index())
         price=(int)(predicted_price[0])
-        print("nearest id's:")
 
-        print("property_no :")
         array=[]
         
         for i in range (predicted_price[1].size):
             array.append(int(predicted_price[1][i]))
-        print(array)
         placeholders = ", ".join(["?"] * len(array))
 
         query= cursor.execute('''SELECT * FROM Property_dealing.dbo.Rent_house WHERE city = ? AND type = ? AND bhk = ? AND furnishing = ? AND price BETWEEN ? AND ? AND locality LIKE '%'+?+'%' ''',r_city, r_prop, r_bhk, r_furnish, r_min_price, r_max_price,r_locality)
         sql_query=query.fetchall() 
-        print(type(sql_query))
         if cursor.rowcount == 0:
             sql='''SELECT * FROM Property_dealing.dbo.Rent_house WHERE property_no  IN (''' + placeholders + ")"
             query = cursor.execute(sql, array)
